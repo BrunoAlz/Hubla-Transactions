@@ -6,6 +6,7 @@ from core.models import User
 from common.serializers import UserSerializer
 from common import api_exceptions
 from rest_framework import status
+from .authentication import JWTAuthentucation
 
 # Refatorar para convenção do DRF
 class RegisterUserView(APIView):
@@ -44,6 +45,18 @@ class LoginUserAPIView(APIView):
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed({'error': 'Please, verify your data input'})        
     
+
+        # Instancia a Classe geradora de Tokens JWT
+        jwt_authentication = JWTAuthentucation()
+        # Chama o método que Cria o Token, passando o Id do usuário da Requisição
+        token =jwt_authentication.generate_jwt(user.id) 
         # PADRONIZAR AS RESPOSTAS PARA QUE FIQUEM ASSIM
-        return Response([ {'message': 'success', 'user': UserSerializer(user).data}], status=status.HTTP_200_OK )
+        return Response([ 
+                    {
+                        'message': 'success', 
+                        # Retornando o Token no Login
+                        'token': token,
+                        'user': UserSerializer(user).data
+                    }
+                ], status=status.HTTP_200_OK )
 
