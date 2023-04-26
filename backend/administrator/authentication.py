@@ -5,7 +5,8 @@ class JWTAuthentucation:
     Criando o JWT utilizando a Lib: https://pyjwt.readthedocs.io/en/stable/
     """
     # Método para gerar o TOKEN 
-    def generate_jwt(self, id):
+    @staticmethod
+    def generate_jwt(id):
         #Cria o Payload para montar o JTW
         payload = {
             # Passa o Id do Usuário

@@ -45,11 +45,8 @@ class LoginUserAPIView(APIView):
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed({'error': 'Please, verify your data input'})        
     
-
-        # Instancia a Classe geradora de Tokens JWT
-        jwt_authentication = JWTAuthentucation()
-        # Chama o método que Cria o Token, passando o Id do usuário da Requisição
-        token =jwt_authentication.generate_jwt(user.id) 
+        # Chama o método ESTATICO que Cria o Token, passando o Id do usuário da Requisição
+        token = JWTAuthentucation.generate_jwt(user.id) 
         # PADRONIZAR AS RESPOSTAS PARA QUE FIQUEM ASSIM
         return Response([ 
                     {
