@@ -5,8 +5,11 @@ from rest_framework import exceptions
 from common.serializers import UserSerializer
 from common import api_exceptions
 
-
+# Refatorar para convenção do DRF
 class RegisterUserView(APIView):
+    """
+    Esta view permite a criação de usuários no sistema.
+    """
     def post(self, request):
         #validando os dados do registro
         data = request.data
@@ -22,3 +25,8 @@ class RegisterUserView(APIView):
 
         # Validações OK - Tem que testar, Registrando usuário e retornando dados.
         return Response(serializer.data)
+
+
+class LoginUserAAPIView(APIView):
+    def post(self, request):
+        pass
