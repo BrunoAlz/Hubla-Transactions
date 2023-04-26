@@ -9,7 +9,7 @@ def date_formarter(data):
     return str(data_formatada)
 
 
-def process_file(file):
+def process_file(file, id):
 
     transactions = []
 
@@ -17,7 +17,7 @@ def process_file(file):
         print("Processamento Iniciado .. .. ..")
         for line in file:
             type_id = int(line[0])
-            type = TransactionType.objects.filter(type=type_id)
+            type = TransactionType.objects.get(type=type_id)
             date = line[1:26].replace(" ", "")
             product = line[26:56].strip()
             price = int(line[56:66])
@@ -28,10 +28,10 @@ def process_file(file):
                 date=date,
                 product=product,
                 price=price,
-                seller=seller
+                seller=seller,
+                contract_id=id
             )
             transactions.append(transaction)
 
-    print(transactions)
-    # Transaction.objects.bulk_create(transactions)
+    Transaction.objects.bulk_create(transactions)
     print("Processamento Finalizado")

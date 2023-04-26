@@ -10,5 +10,6 @@ import os
 def process_data(sender, instance, **kwargs):
     print("CHAMANDO O SIGNAL PARA INICIAR O PROCESSAMENTO!")
     path = instance.upload.path
+    contract_id = instance.id
     if os.path.isfile(path):
-        process_file(path)
+        process_file(path, contract_id)
