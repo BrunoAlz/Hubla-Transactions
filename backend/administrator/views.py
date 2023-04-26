@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 from core.models import User
-from common.serializers import UserSerializer
-from common import api_exceptions
+from core.serializers import UserSerializer
+from core import api_exceptions
 from rest_framework import status
 from .authentication import JWTAuthentucation
 from rest_framework import permissions
