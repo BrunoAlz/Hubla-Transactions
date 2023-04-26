@@ -2,6 +2,7 @@ from django.db import models
 from core.models import User
 from django.urls import reverse
 from core.utils.file_path import upload_documentos
+from core.utils.balance_formater import balance_formater
 
 
 class Contract(models.Model):
@@ -70,6 +71,25 @@ class TransactionType(models.Model):
 
     def get_absolute_url(self):
         return reverse("TransactionType_detail", kwargs={"pk": self.pk})
+
+
+class Seller(models.Model):
+
+    name = models.CharField(
+        'Seller name',
+        max_length=20
+    )
+
+    balance = models.PositiveIntegerField(
+        null=True, blank=True
+    )
+
+    def __str__(self):
+        return f'{self.name}'
+
+    @property
+    def formated_balance(self):
+        return balance_formater(self.balance)
 
 
 class Transaction(models.Model):
