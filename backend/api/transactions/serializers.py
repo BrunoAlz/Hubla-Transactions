@@ -18,4 +18,4 @@ class ContractRegisterSerializer(serializers.ModelSerializer):
 class ContractListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
-        field = '__all__'
+        fields = ['creator', 'created_at', 'upload']

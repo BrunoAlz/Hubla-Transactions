@@ -1,8 +1,12 @@
+from rest_framework import viewsets
+from core.serializers import UserSerializer
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 from core.models import User
-from .serializers import ContractRegisterSerializer
+from .serializers import ContractRegisterSerializer, ContractListSerializer
 from core import api_exceptions
 from administrator.authentication import JWTAuthentucation
 from rest_framework import permissions
@@ -39,8 +43,6 @@ class ContractListView(APIView):
     def get(self, request):
 
         user = request.user.id
-        print(user)
         contracts = Contract.objects.filter(creator_id=user)
-        print(contracts)
-
-        return Response("ok")
+        serializer = ContractListSerializer(contracts, many=True)
+        return Response(serializer.data)
