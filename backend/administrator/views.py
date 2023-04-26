@@ -57,3 +57,8 @@ class LoginUserAPIView(APIView):
                     }
                 ], status=status.HTTP_200_OK )
 
+
+
+class AuthenticatedUserAPIView(APIView):
+    def get(self, request):
+        pass
