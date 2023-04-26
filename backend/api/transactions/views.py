@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from core.api_permissions import IsOwnerOrRedirect
 from core.models import User
 from .serializers import ContractRegisterSerializer, ContractListSerializer, ContractDetailSerializer
 from administrator.authentication import JWTAuthentucation
@@ -48,23 +49,24 @@ class ContractDetailAPIView(APIView):
     Retrieve, update or delete a snippet instance.
     """
     authentication_classes = [JWTAuthentucation]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrRedirect]
 
     def get_object(self, pk):
-        user = self.get_object['']
-
         try:
-            return Contract.objects.get(pk=pk, creator_id=user)
+            contract = Contract.objects.get(
+                pk=pk, creator_id=self.request.user)
+
+            self.check_object_permissions(self.request, contract)
+            return contract
         except Contract.DoesNotExist:
             raise exceptions.NotFound(
-                {'error': 'That contract do not exists or it doesnt belows to you '})
+                {'error': 'That contract do not exists or it doesnt belows to you'})
 
     def get(self, request, pk, format=None):
-
         contract = self.get_object(pk)
-        # Aqui, você pode obter os dados do modelo relacionado ao seu modelo
-        # contract_transactions = contract.transactions.all()
+        # faz a relação entre os models
+        # dados_relacionados = seu_modelo.modelo_relacionado.all()
         # E serializar os dados usando o seu serializador
         serializer = ContractDetailSerializer(contract)
-        # E retorná-los na resposta
+        # retorna
         return Response(serializer.data)
