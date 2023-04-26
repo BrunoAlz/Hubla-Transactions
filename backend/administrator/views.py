@@ -7,6 +7,7 @@ from common.serializers import UserSerializer
 from common import api_exceptions
 from rest_framework import status
 from .authentication import JWTAuthentucation
+from rest_framework import permissions
 
 # Refatorar para convenção do DRF
 class RegisterUserView(APIView):
@@ -60,5 +61,9 @@ class LoginUserAPIView(APIView):
 
 
 class AuthenticatedUserAPIView(APIView):
+
+    authentication_classes = [JWTAuthentucation]
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request):
-        pass
+        return Response(UserSerializer(request.user).data)
