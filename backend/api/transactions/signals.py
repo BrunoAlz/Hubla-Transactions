@@ -5,7 +5,6 @@ from django.core.management import call_command
 import os
 
 
-
 @receiver(post_save, sender=Contract)
 def process_data(sender, instance, **kwargs):
     path = instance.upload.path

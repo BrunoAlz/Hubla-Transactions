@@ -7,6 +7,12 @@ from core.utils.balance_formater import balance_formater
 
 class Contract(models.Model):
 
+    STATUS = (
+        ("1", "1"),
+        ("2", "2"),
+        ("3", "3"),
+    )
+
     creator = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING
@@ -18,6 +24,12 @@ class Contract(models.Model):
     upload = models.FileField(
         'Document',
         upload_to=upload_documentos
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS,
+        default=""
     )
 
     class Meta:
