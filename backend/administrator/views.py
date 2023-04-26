@@ -45,5 +45,5 @@ class LoginUserAPIView(APIView):
             raise exceptions.AuthenticationFailed({'error': 'Please, verify your data input'})        
     
         # PADRONIZAR AS RESPOSTAS PARA QUE FIQUEM ASSIM
-        return Response(UserSerializer(user).data)
+        return Response([ {'message': 'success', 'user': UserSerializer(user).data}], status=status.HTTP_200_OK )
 
