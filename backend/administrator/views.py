@@ -2,8 +2,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
+from core.models import User
 from common.serializers import UserSerializer
 from common import api_exceptions
+from rest_framework import status
 
 # Refatorar para convenção do DRF
 class RegisterUserView(APIView):
@@ -27,6 +29,21 @@ class RegisterUserView(APIView):
         return Response(serializer.data)
 
 
-class LoginUserAAPIView(APIView):
+class LoginUserAPIView(APIView):
     def post(self, request):
-        pass
+        email = request.data['email']
+        password = request.data['password']
+
+        user = User.objects.filter(email=email).first()
+
+        # Verifica se o usuário está correto / existe
+        if user is None:
+            raise exceptions.AuthenticationFailed({'error': 'Please, verify your data input'})
+        
+        # Verifica se o pass está correto / existe
+        if not user.check_password(password):
+            raise exceptions.AuthenticationFailed({'error': 'Please, verify your data input'})        
+    
+        # PADRONIZAR AS RESPOSTAS PARA QUE FIQUEM ASSIM
+        return Response(UserSerializer(user).data)
+
