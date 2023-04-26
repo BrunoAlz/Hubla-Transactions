@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Contract
+from .models import Contract, Transaction
 
 
 class ContractRegisterSerializer(serializers.ModelSerializer):
@@ -21,14 +21,16 @@ class ContractListSerializer(serializers.ModelSerializer):
         fields = ['creator', 'created_at', 'upload']
 
 
-# class ContractTransactionDataSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Transactions
-#         fields = ['campo1', 'campo2', ...]
+class ContractTransactionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['id', 'type', 'contract',
+                  'date', 'product', 'price', 'seller']
+
 
 class ContractDetailSerializer(serializers.ModelSerializer):
-    # dados_relacionados = ContractTransactionSerializer(many=True)
-    # 'dados_relacionados' Colocar nos Fields depois
+    transactio_contract = ContractTransactionsSerializer(many=True)
+
     class Meta:
         model = Contract
-        fields = ['creator', 'created_at', 'upload']
+        fields = ['creator', 'created_at', 'upload', 'transactio_contract']

@@ -55,7 +55,6 @@ class ContractDetailAPIView(APIView):
         try:
             contract = Contract.objects.get(
                 pk=pk, creator_id=self.request.user)
-
             self.check_object_permissions(self.request, contract)
             return contract
         except Contract.DoesNotExist:
@@ -64,9 +63,5 @@ class ContractDetailAPIView(APIView):
 
     def get(self, request, pk, format=None):
         contract = self.get_object(pk)
-        # faz a relação entre os models
-        # dados_relacionados = seu_modelo.modelo_relacionado.all()
-        # E serializar os dados usando o seu serializador
         serializer = ContractDetailSerializer(contract)
-        # retorna
         return Response(serializer.data)
