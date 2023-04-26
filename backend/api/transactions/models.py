@@ -40,9 +40,7 @@ class TransactionType(models.Model):
         ("-", "-"),
     )
 
-    type = models.AutoField(
-        primary_key=True,
-        editable=False
+    type = models.SmallIntegerField(
     )
 
     description = models.CharField(
@@ -60,10 +58,6 @@ class TransactionType(models.Model):
         max_length=1,
         choices=SIGNAL,
         default=" "
-    )
-
-    mapper = models.PositiveSmallIntegerField(
-
     )
 
     class Meta:

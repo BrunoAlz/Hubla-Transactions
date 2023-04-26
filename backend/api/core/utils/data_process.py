@@ -17,7 +17,7 @@ def process_file(file):
         print("Processamento Iniciado .. .. ..")
         for line in file:
             type_id = int(line[0])
-            type = TransactionType.objects.filter(mapper=type_id)
+            type = TransactionType.objects.filter(type=type_id)
             date = line[1:26].replace(" ", "")
             product = line[26:56].strip()
             price = int(line[56:66])
