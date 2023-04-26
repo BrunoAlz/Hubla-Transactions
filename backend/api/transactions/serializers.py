@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Contract
-from rest_framework.fields import CurrentUserDefault
 
 
 class ContractRegisterSerializer(serializers.ModelSerializer):
@@ -14,3 +13,9 @@ class ContractRegisterSerializer(serializers.ModelSerializer):
         instance = Contract(upload=validated_data['upload'], creator=user)
         instance.save()
         return instance
+
+
+class ContractListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contract
+        field = '__all__'

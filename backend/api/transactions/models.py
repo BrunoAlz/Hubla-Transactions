@@ -24,7 +24,4 @@ class Contract(models.Model):
         verbose_name_plural = "Contracts"
 
     def __str__(self):
-        return self.creator
-
-    def get_absolute_url(self):
-        return reverse("Contract_detail", kwargs={"pk": self.pk})
+        return self.creator.first_name
