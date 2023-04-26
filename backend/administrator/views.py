@@ -5,5 +5,5 @@ from rest_framework.response import Response
 
 class RegisterUserView(APIView):
     def post(self, request):
-    
+        # Testar api
         return Response('ok')
