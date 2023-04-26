@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import User
 from django.urls import reverse
+from core.utils.file_path import upload_documentos
 
 
 class Contract(models.Model):
@@ -14,7 +15,8 @@ class Contract(models.Model):
     )
 
     upload = models.FileField(
-        'Document'
+        'Document',
+        upload_to=upload_documentos
     )
 
     class Meta:
