@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api.administrator',
     'api.core',
     'api.transactions',
+    'api.core.management'
 ]
 
 MIDDLEWARE = [

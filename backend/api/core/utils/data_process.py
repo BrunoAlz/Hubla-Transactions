@@ -15,6 +15,7 @@ def process_file(file, id):
 
     with open(file, 'r') as file:
         print("Processamento Iniciado .. .. ..")
+
         for line in file:
             type_id = int(line[0])
             type = TransactionType.objects.get(type=type_id)
