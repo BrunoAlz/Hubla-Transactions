@@ -76,7 +76,14 @@ class Transaction(models.Model):
 
     type = models.ForeignKey(
         TransactionType,
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        related_name='transaction_type'
+    )
+
+    contract = models.ForeignKey(
+        Contract,
+        on_delete=models.DO_NOTHING,
+        related_name='transactio_contract'
     )
 
     date = models.DateTimeField(
