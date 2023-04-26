@@ -19,3 +19,16 @@ class ContractListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
         fields = ['creator', 'created_at', 'upload']
+
+
+# class ContractTransactionDataSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Transactions
+#         fields = ['campo1', 'campo2', ...]
+
+class ContractDetailSerializer(serializers.ModelSerializer):
+    # dados_relacionados = ContractTransactionSerializer(many=True)
+    # 'dados_relacionados' Colocar nos Fields depois
+    class Meta:
+        model = Contract
+        fields = ['creator', 'created_at', 'upload']
