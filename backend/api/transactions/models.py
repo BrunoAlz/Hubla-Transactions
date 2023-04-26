@@ -62,6 +62,10 @@ class TransactionType(models.Model):
         default=" "
     )
 
+    mapper = models.PositiveSmallIntegerField(
+
+    )
+
     class Meta:
         verbose_name = ("TransactionType")
         verbose_name_plural = ("TransactionTypes")
