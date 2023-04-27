@@ -28,9 +28,7 @@ class Command(BaseCommand):
             # Se encontrar um, pega todos e Processa.
             pending = Contract.objects.filter(status=1)
             for data in pending:
-                # Como o arquivo vai ser execultado via terminal, troquei os
-                # Prints pelo método da própria classe, que imprime de forma
-                # Mais intuitiva no terminal
+                # Impre no terminal a Mensagem de Processamento
                 self.stdout.write(self.style.WARNING(
                     f"Processando os Contrato: {data.id}"))
 
