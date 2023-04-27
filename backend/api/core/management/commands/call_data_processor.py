@@ -9,9 +9,9 @@ from transactions.models import TransactionType, Transaction
 class Command(BaseCommand):
     help = 'Call the process data function to extract data from txt and save on DB'
 
-    # def add_arguments(self, parser):
-    #     parser.add_argument('file', type=str, help='Caminho do Arquivo')
-    #     parser.add_argument('id', type=int, help='Id do Contrato')
+    def add_arguments(self, parser):
+        parser.add_argument('file', type=str, help='Caminho do Arquivo')
+        parser.add_argument('id', type=int, help='Id do Contrato')
 
     def handle(self, *args, **kwargs):
         file = kwargs['file']

@@ -8,9 +8,9 @@ from core.utils.balance_formater import balance_formater
 class Contract(models.Model):
 
     STATUS = (
-        ("1", "1"),
-        ("2", "2"),
-        ("3", "3"),
+        ("1", "Pendente"),
+        ("2", "Processando"),
+        ("3", "Processado"),
     )
 
     creator = models.ForeignKey(
@@ -29,7 +29,7 @@ class Contract(models.Model):
     status = models.CharField(
         max_length=1,
         choices=STATUS,
-        default=""
+        default="1"
     )
 
     class Meta:

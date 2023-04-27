@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from transactions.models import TransactionType, Transaction
+from transactions.models import Contract
+from django.core.management import call_command
 
 # REFERÊNCIA
 # https://simpleisbetterthancomplex.com/tutorial/2018/08/27/how-to-create-custom-django-management-commands.html
@@ -14,31 +15,9 @@ class Command(BaseCommand):
     #     parser.add_argument('id', type=int, help='Id do Contrato')
 
     def handle(self, *args, **kwargs):
-        file = kwargs['file']
-        id = kwargs['id']
-
-        transactions = []
-
-        with open(file, 'r') as file:
-            print("Processamento Iniciado .. .. ..")
-
-            for line in file:
-                type_id = int(line[0])
-                type = TransactionType.objects.get(type=type_id)
-                date = line[1:26].replace(" ", "")
-                product = line[26:56].strip()
-                price = int(line[56:66])
-                seller = line[66:86].strip()
-
-                transaction = Transaction(
-                    type=type,
-                    date=date,
-                    product=product,
-                    price=price,
-                    seller=seller,
-                    contract_id=id
-                )
-                transactions.append(transaction)
-
-        Transaction.objects.bulk_create(transactions)
-        print("Processamento Finalizado")
+        pending = Contract.objects.filter(status=1)
+        for data in pending:
+            print(
+                f"CHAMANDO O COMMAND PARA INICIAR O PROCESSAMENTO! {data.id}")
+            call_command('call_data_processor', data.upload.path,
+                         int(data.id), force_color=False)
