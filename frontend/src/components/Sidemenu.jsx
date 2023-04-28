@@ -15,18 +15,18 @@ const Sidemenu = () => {
           <h4 className="m-3 text-center">
             Olá {user.first_name} {user.last_name}
           </h4>
-          <li className="nav-item">
+          <li className="nav-item fs-4  mx-3">
             <a className="nav-link active" aria-current="page" href="#">
               <span data-feather="home" className="align-text-bottom"></span>
-              Dashboard
+              Dashboard <i className="bi bi-pie-chart"></i>
             </a>
           </li>
-          <li className="nav-item">
+          <li className="nav-item fs-4  mx-3">
             <a className="nav-link" href="#">
               <span data-feather="file" className="align-text-bottom"></span>
-              Orders
+              Contracts <i className="bi bi-file-text"></i>
             </a>
-          </li>   
+          </li>
         </ul>
       </div>
     </nav>
