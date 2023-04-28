@@ -15,16 +15,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const user = {
-      first_name,
-      last_name,
-      email,
-      password,
-      password_confirm,
-    };
-
-    dispatch(register(user));
+    console.log(firstName);
   };
 
     useEffect(() => {
@@ -75,7 +66,7 @@ const Register = () => {
                       Email
                     </label>
                     <input
-                      type="email"
+                      type="password"
                       className="form-control"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email || ""}
@@ -88,7 +79,7 @@ const Register = () => {
                           Password
                         </label>
                         <input
-                          type="password"
+                          type="text"
                           className="form-control"
                           onChange={(e) => setPassword(e.target.value)}
                           value={password || ""}
@@ -101,7 +92,7 @@ const Register = () => {
                           Confirm Password
                         </label>
                         <input
-                          type="password"
+                          type="text"
                           className="form-control"
                           onChange={(e) => setPasswordConfirm(e.target.value)}
                           value={password_confirm || ""}
