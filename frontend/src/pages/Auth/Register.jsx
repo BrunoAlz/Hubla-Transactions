@@ -1,7 +1,14 @@
 import "./Auth.css";
 import logo from "../../assets/navLogo.svg";
-import { useState} from "react";
-
+// HOOKS
+import { useState, useEffect } from "react";
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+// ROUTERS
+import { useNavigate } from "react-router-dom";
+// REDUCERS
+import { register, reset } from "../../slices/auth/authSlice";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [first_name, setFirstName] = useState("");
@@ -10,9 +17,44 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [password_confirm, setPasswordConfirm] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+      Object.values(message).forEach((errorArray) => {
+        errorArray.forEach((errorMessage) => {
+          toast.error(errorMessage);
+        });
+      });
+    }
+    // if (isSuccess) {
+    //   navigate("/");     
+    // }
+
+    dispatch(reset());
+  }, [isError, isSuccess, message, user, navigate, dispatch]);
+
+  const handlerSubmit = (e) => {
     e.preventDefault();
+
+    if (!password) {
+      toast.error("As senhas devem ser iguais");
+    } else {
+      const userData = {
+        first_name,
+        last_name,
+        email,
+        password,
+        password_confirm,
+      };
+      dispatch(register(userData));
+    }
   };
 
   return (
@@ -23,7 +65,7 @@ const Register = () => {
             <div className="card">
               <div className="card-body py-5 px-md-5 shadow">
                 <p className="text-center fs-2 fw-bold">Register</p>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handlerSubmit}>
                   <div className="row">
                     <div className="col-md-6 mb-4">
                       <div className="form-outline">
@@ -99,6 +141,7 @@ const Register = () => {
                   </div>
 
                   <div className="row">
+                    {isLoading && "CARREGANDO"}
                     <button
                       type="submit"
                       className="btn btn-primary btn-block shadow mb-4"
