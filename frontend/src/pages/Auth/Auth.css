@@ -24,3 +24,26 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.grey-bg {
+    background-color: hsl(0, 0%, 96%)
+}
+
+.login-text {
+    color: hsl(217, 10%, 50.8%)
+}
+
+.hubla-login {
+    max-width: 1200px;
+}
+
+.hubla-register {
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+}
+
+.login-card {
+    opacity: 0.9;
+}
