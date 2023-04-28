@@ -57,7 +57,7 @@ const Register = () => {
                       Email
                     </label>
                     <input
-                      type="password"
+                      type="email"
                       className="form-control"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email || ""}
@@ -70,7 +70,7 @@ const Register = () => {
                           Password
                         </label>
                         <input
-                          type="text"
+                          type="password"
                           className="form-control"
                           onChange={(e) => setPassword(e.target.value)}
                           value={password || ""}
@@ -83,7 +83,7 @@ const Register = () => {
                           Confirm Password
                         </label>
                         <input
-                          type="text"
+                          type="password"
                           className="form-control"
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           value={confirmPassword || ""}
