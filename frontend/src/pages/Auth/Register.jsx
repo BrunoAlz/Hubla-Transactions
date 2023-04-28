@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 // ROUTERS
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
 // REDUCERS
 import { register, reset } from "../../slices/auth/authSlice";
 import { toast } from "react-toastify";
@@ -43,7 +43,7 @@ const Register = () => {
   const handlerSubmit = (e) => {
     e.preventDefault();
 
-    if (!password) {
+    if (password !== password_confirm) {
       toast.error("As senhas devem ser iguais");
     } else {
       const userData = {
@@ -150,6 +150,9 @@ const Register = () => {
                     </button>
                   </div>
                 </form>
+                <span>
+                  Já possui cadastro ?<Link to="/login"> Entrar!</Link>
+                </span>
               </div>
             </div>
           </div>

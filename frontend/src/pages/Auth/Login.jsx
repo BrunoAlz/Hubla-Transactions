@@ -1,5 +1,6 @@
 import "./Auth.css";
 import logo from "../../assets/navLogo.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -14,11 +15,11 @@ const Login = () => {
             />
             <h1 className="display-3 fw-bold ls-tight">
               The best offer <br />
-              <span className="text-primary">for your {" "}
-              <span className="">.</span>
-              <span className="">T</span>
-              <span className="ms-4">x</span>
-              <span className="ms-4">t</span>
+              <span className="text-primary">
+                for your <span className="">.</span>
+                <span className="">T</span>
+                <span className="ms-4">x</span>
+                <span className="ms-4">t</span>
               </span>
             </h1>
           </div>
@@ -49,6 +50,9 @@ const Login = () => {
                     </button>
                   </div>
                 </form>
+                <span>
+                  Não é cadastrado? <Link to="/register">Sing Up</Link>
+                </span>
               </div>
             </div>
           </div>
