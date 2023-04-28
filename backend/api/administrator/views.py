@@ -41,24 +41,17 @@ class LoginUserAPIView(APIView):
         # Verifica se o usuário está correto / existe
         if user is None:
             raise exceptions.AuthenticationFailed(
-                {'error': 'Please, verify your data input'})
+                {'error': 'Please check your credentials!'})
 
         # Verifica se o pass está correto / existe
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed(
-                {'error': 'Please, verify your data input'})
+                {'error': 'Please check your credentials!'})
 
         # Chama o método ESTATICO que Cria o Token, passando o Id do usuário da Requisição
         token = JWTAuthentucation.generate_jwt(user.id)
         # PADRONIZAR AS RESPOSTAS PARA QUE FIQUEM ASSIM
-        return Response([
-            {
-                        'message': 'success',
-                        # Retornando o Token no Login
-                        'token': token,
-                        'user': UserSerializer(user).data
-                        }
-        ], status=status.HTTP_200_OK)
+        return Response([{'user': UserSerializer(user).data, 'token': token}], status=status.HTTP_200_OK)
 
 
 class AuthenticatedUserAPIView(APIView):
