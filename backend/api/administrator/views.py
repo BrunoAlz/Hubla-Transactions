@@ -18,19 +18,17 @@ class RegisterUserView(APIView):
     """
 
     def post(self, request):
-        # validando os dados do registro
-        data = request.data
-        # compara se os passwords são iguais
-        if data['password'] != data['password_confirm']:
-            # Criando Exceções customizadas
-            raise api_exceptions.PasswordDoNotMatchException()
-
-        serializer = UserSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        # Validações OK - Tem que testar, Registrando usuário e retornando dados.
-        return Response(serializer.data)
+        # Recebe os dados do Serializer
+        serializer = UserSerializer(data=request.data)
+        # Verifica se os dados estão validos
+        if serializer.is_valid():
+            # Se sim salva os dados
+            serializer.save()
+            # Retorna os dados
+            return Response({"success": "User registred!"}, status=status.HTTP_200_OK)
+        else:
+            # Se não Retorna os erros, e o status.
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginUserAPIView(APIView):

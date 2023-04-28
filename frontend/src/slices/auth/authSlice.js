@@ -18,10 +18,6 @@ export const register = createAsyncThunk(
       return await authService.register(userData);
     } catch (error) {
       const message = error.response.data
-        console.log(message)
-        error.toString();
-        console.log(error);
-
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -47,12 +43,14 @@ export const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.message = action.payload.data;
+        
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+
         state.user = null;        
       })      
   },

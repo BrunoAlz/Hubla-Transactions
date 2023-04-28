@@ -26,16 +26,16 @@ const Register = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
       Object.values(message).forEach((errorArray) => {
         errorArray.forEach((errorMessage) => {
           toast.error(errorMessage);
         });
       });
     }
-    // if (isSuccess) {
-    //   navigate("/");     
-    // }
+    if (isSuccess) {
+      navigate("/login");
+      toast.success("Cadastrado!");
+    }
 
     dispatch(reset());
   }, [isError, isSuccess, message, user, navigate, dispatch]);
