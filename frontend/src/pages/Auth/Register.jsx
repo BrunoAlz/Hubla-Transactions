@@ -1,18 +1,36 @@
 import "./Auth.css";
 import logo from "../../assets/navLogo.svg";
-
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { register, reset } from "../../slices/authSlice";
 
 const Register = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password_confirm, setPasswordConfirm] = useState("");
 
-  const handleSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const user = {
+      first_name,
+      last_name,
+      email,
+      password,
+      password_confirm,
+    };
+
+    dispatch(register(user));
   };
+
+    useEffect(() => {
+      dispatch(reset());
+    }, [dispatch]);
+
 
   return (
     <div className="grey-bg px-4 mt-5 py-5 px-md-5 text-center text-lg-start">
@@ -33,7 +51,7 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           onChange={(e) => setFirstName(e.target.value)}
-                          value={firstName || ""}
+                          value={first_name || ""}
                         />
                       </div>
                     </div>
@@ -46,7 +64,7 @@ const Register = () => {
                           type="text"
                           className="form-control"
                           onChange={(e) => setLastName(e.target.value)}
-                          value={lastName || ""}
+                          value={last_name || ""}
                         />
                       </div>
                     </div>
@@ -85,8 +103,8 @@ const Register = () => {
                         <input
                           type="password"
                           className="form-control"
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          value={confirmPassword || ""}
+                          onChange={(e) => setPasswordConfirm(e.target.value)}
+                          value={password_confirm || ""}
                         />
                       </div>
                     </div>
