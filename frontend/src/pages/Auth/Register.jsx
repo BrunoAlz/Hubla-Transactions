@@ -1,8 +1,7 @@
 import "./Auth.css";
 import logo from "../../assets/navLogo.svg";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { register, reset } from "../../slices/authSlice";
+import { useState} from "react";
+
 
 const Register = () => {
   const [first_name, setFirstName] = useState("");
@@ -11,16 +10,10 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [password_confirm, setPasswordConfirm] = useState("");
 
-  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   };
-
-    useEffect(() => {
-      dispatch(reset());
-    }, [dispatch]);
-
 
   return (
     <div className="grey-bg px-4 mt-5 py-5 px-md-5 text-center text-lg-start">
@@ -39,6 +32,7 @@ const Register = () => {
                         </label>
                         <input
                           type="text"
+                          required
                           className="form-control"
                           onChange={(e) => setFirstName(e.target.value)}
                           value={first_name || ""}
@@ -51,6 +45,7 @@ const Register = () => {
                           Last name
                         </label>
                         <input
+                          required
                           type="text"
                           className="form-control"
                           onChange={(e) => setLastName(e.target.value)}
@@ -65,7 +60,8 @@ const Register = () => {
                       Email
                     </label>
                     <input
-                      type="password"
+                      required
+                      type="email"
                       className="form-control"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email || ""}
@@ -78,7 +74,8 @@ const Register = () => {
                           Password
                         </label>
                         <input
-                          type="text"
+                          required
+                          type="password"
                           className="form-control"
                           onChange={(e) => setPassword(e.target.value)}
                           value={password || ""}
@@ -91,7 +88,8 @@ const Register = () => {
                           Confirm Password
                         </label>
                         <input
-                          type="text"
+                          required
+                          type="password"
                           className="form-control"
                           onChange={(e) => setPasswordConfirm(e.target.value)}
                           value={password_confirm || ""}
