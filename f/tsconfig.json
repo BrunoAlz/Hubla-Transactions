@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "../frontend/src/App.test.jsx", "../frontend/src/components"  ]
 }

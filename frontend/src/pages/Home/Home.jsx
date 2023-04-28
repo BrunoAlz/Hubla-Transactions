@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '../../components/Navbar';
-import Sidemenu from "../../components/Sidemenu";
+import Navbar from '../../../../frontend/src/components/Navbar';
+import Sidemenu from "../../../../frontend/src/components/Sidemenu";
 
 
 const Home = () => {
