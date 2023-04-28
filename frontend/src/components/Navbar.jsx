@@ -1,11 +1,28 @@
-import React from 'react'
+import React from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout, reset } from "../slices/auth/authSlice";
+
 
 const Navbar = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+
+    navigate("/login");
+  };
+
   return (
     <header className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-      <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
-        Company name
-      </a>
+      <button className="navbar-brand col-md-3 col-lg-2 fs-4" href="#">
+        Hubla Transactions
+      </button>
       <button
         className="navbar-toggler position-absolute d-md-none collapsed"
         type="button"
@@ -17,16 +34,23 @@ const Navbar = () => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      {/* <input className="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search"> */}
+      
+      <input
+        className="form-control form-control-dark w-100 rounded-0 border-0"
+        type="text"
+        placeholder="Search"
+        aria-label="Search"
+      />
+
       <div className="navbar-nav">
         <div className="nav-item text-nowrap">
-          <a className="nav-link px-3" href="#">
+          <button className="nav-link px-3 fs-4" onClick={handleLogout}>
             Sign out
-          </a>
+          </button>
         </div>
       </div>
     </header>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

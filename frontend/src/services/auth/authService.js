@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
 
 const API_ENDPOINT = "http://127.0.0.1:8000/api/";
 //
@@ -23,10 +24,16 @@ const login = async (userData) => {
     CONFIG
   );
   if (response.data[0].token) {
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("user", JSON.stringify(response.data[0]));    
   }
   return response.data;
 };
 
-const authService = { register, login };
+// logout user
+const logout = () => {
+  localStorage.removeItem("user");
+};
+
+
+const authService = { register, login, logout };
 export default authService;

@@ -1,9 +1,9 @@
-import React from 'react'
-import Navbar from '../../../../frontend/src/components/Navbar';
+import React from "react";
+import Navbar from "../../../../frontend/src/components/Navbar";
 import Sidemenu from "../../../../frontend/src/components/Sidemenu";
 
-
 const Home = () => {
+
   return (
     <div>
       <Navbar />
@@ -39,6 +39,6 @@ const Home = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Home
+export default Home;
