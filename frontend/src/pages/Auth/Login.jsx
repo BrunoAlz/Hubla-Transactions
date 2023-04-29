@@ -103,7 +103,7 @@ const Login = () => {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-secondary fs-5"
+                        className="btn btn-secondary btn-block mb-4 shadow fs-5"
                         type="button"
                         disabled
                       >
