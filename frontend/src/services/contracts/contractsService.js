@@ -14,11 +14,10 @@ const contractUpload = async (txtFile) => {
           Authorization: `Bearer ${user.token}`,
         },
       }
-    );
-
+    );    
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data.detail);
+    throw new Error(error.response.data.upload);
   }
 };
 

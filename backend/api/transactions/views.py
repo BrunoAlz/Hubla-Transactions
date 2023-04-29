@@ -1,12 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from core.api_permissions import IsOwnerOrRedirect
-from core.models import User
-from .serializers import ContractRegisterSerializer, ContractListSerializer, ContractDetailSerializer
+from .serializers import (ContractRegisterSerializer,
+                          ContractListSerializer, ContractDetailSerializer)
 from administrator.authentication import JWTAuthentucation
 from rest_framework import permissions
 from rest_framework import exceptions
 from .models import Contract
+from rest_framework import serializers
+
 
 # Refatorar para convenção do DRF
 
@@ -20,15 +22,15 @@ class ContractRegisterView(APIView):
 
     def post(self, request):
         # validando os dados do registro
-        data = request.data
-
         serializer = ContractRegisterSerializer(
-            data=data, context={'user': request.user})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+            data=request.data, context={'user': request.user})
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({'success': 'Contrato registrado com sucesso.'})
 
-        # Validações OK - Tem que testar, Registrando usuário e retornando dados.
-        return Response(data)
+        except serializers.ValidationError as e:
+            return Response({'error': e.detail})
 
 
 class ContractListView(APIView):

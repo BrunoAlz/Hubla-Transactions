@@ -3,54 +3,61 @@ import contractsService from "../../services/contracts/contractsService";
 
 const initialState = {
   upload: [],
-  error: false,
-  success: false,
-  loading: false,
+  isError: false,
+  isLoading: false,
+  isSuccess: false,
+  message: "",
 };
 
-// Publish user publish
 export const fileUpload = createAsyncThunk(
-  "fileUpload/publish",
+  "contracts/fileUpload",
   async (fileUpload, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
 
     const data = await contractsService.contractUpload(fileUpload, token);
 
-    // Check for erros
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
+    if (data.success) {
+      return thunkAPI.fulfillWithValue(data);
+    } else {
+      const message = data.error.upload[0];
+      return thunkAPI.rejectWithValue(message);
     }
-    return data;
   }
 );
+
+
 
 export const fileUploadSlice = createSlice({
   name: "fileUpload",
   initialState,
   reducers: {
-    resetMessage: (state) => {
-      state.message = null;
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fileUpload.pending, (state) => {
-        state.loading = true;
-        state.error = false;
+        state.isLoading = true;
+        state.isError = false;
       })
       .addCase(fileUpload.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.upload = action.payload;
-        state.message = "Contrato cadastrado com Sucesso!";
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = null;
+        state.message = action.payload;
       })
       .addCase(fileUpload.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.fileUpload = [];
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
-export default fileUpload.reducer;
+export const { reset } = fileUploadSlice.actions;
+export default fileUploadSlice.reducer;
