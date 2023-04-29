@@ -24,7 +24,7 @@ class JWTAuthentucation:
             payload = jwt.decode(token, "CHAVE_SECRETA_LEMBRAR_DE_MUDAR", algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise exceptions.AuthenticationFailed('Token expirado.')
-        except:
+        except jwt.InvalidTokenError:
             raise exceptions.AuthenticationFailed('Token inválido.')
         # Extrai o id do usuário
         user_id = payload['user_id']

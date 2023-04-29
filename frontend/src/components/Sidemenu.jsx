@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from "react-redux";
+import ContractForm from './ContractForm';
 
 
 const Sidemenu = () => {
@@ -27,6 +28,9 @@ const Sidemenu = () => {
               Contracts <i className="bi bi-file-text"></i>
             </a>
           </li>
+
+          <ContractForm/>
+
         </ul>
       </div>
     </nav>
