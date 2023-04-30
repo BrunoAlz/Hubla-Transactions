@@ -39,7 +39,12 @@ class Contract(models.Model):
         verbose_name_plural = "Contracts"
 
     def __str__(self):
-        return self.creator.first_name
+        return f"{self.creator.first_name} {self.creator.last_name}"
+
+    @property
+    def get_creator_full_name(self):
+        full_name = f"{self.creator.first_name} {self.creator.last_name}"
+        return full_name
 
 
 class TransactionType(models.Model):

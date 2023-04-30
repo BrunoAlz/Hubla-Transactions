@@ -28,9 +28,15 @@ class ContractRegisterSerializer(serializers.ModelSerializer):
 
 
 class ContractListSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(
+        source='creator.first_name', read_only=True)
+    last_name = serializers.CharField(
+        source='creator.last_name', read_only=True)
+
     class Meta:
         model = Contract
-        fields = ['id', 'creator', 'created_at', 'upload']
+        fields = ['id', 'first_name', 'last_name',
+                  'created_at', 'upload', 'status']
 
 
 class ContractTransactionsSerializer(serializers.ModelSerializer):

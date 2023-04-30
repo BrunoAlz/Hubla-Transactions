@@ -1,9 +1,12 @@
 import Table from "../../components/Table";
+import ContractForm from "../../components/ContractForm";
 import Layout from "../Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { contractsList } from "../../slices/contracts/contractsSlice";
 import { toast } from "react-toastify";
+
+
 
 const Contracts = () => {
   const { contracts, isLoading, isError, isSuccess, message } = useSelector(
@@ -23,7 +26,7 @@ const Contracts = () => {
         <div className="row">
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1>Contracts</h1>
-            <Table props={contracts} />
+            {contracts ? <Table props={contracts} /> : "A"}
           </main>
         </div>
       </div>
