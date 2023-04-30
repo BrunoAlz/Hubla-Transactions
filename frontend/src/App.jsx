@@ -2,6 +2,7 @@
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home/Home";
+import NotFound404 from "./pages/notFound404";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -40,6 +41,7 @@ function App() {
             />
             <Route path={"/login"} element={<Login />} />
             <Route path={"/register"} element={<Register />} />
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
           <ToastContainer theme="dark" />
         </BrowserRouter>
