@@ -1,39 +1,30 @@
-import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-const Table = () => {
+const Table = ({ props }) => {
   return (
-    <table className="table table-striped table-sm">
+    <table className="table table-striped table-hover mt-5">
       <thead>
         <tr>
           <th>N°</th>
-          <th>Owner</th>
           <th>Date</th>
           <th>File</th>
+          <th>Owner</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry the Bird</td>
-          <td>Larry the Bird</td>
-          <td>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
+        {props &&
+          props.map((contract) => (
+            <tr key={contract.id}>
+              <th scope="row">{contract.id}</th>
+              <td>{contract.created_at}</td>
+              <td>{contract.upload}</td>
+              <td>{contract.creator}</td>
+              <td>{contract.status}</td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );

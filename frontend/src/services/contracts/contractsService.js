@@ -14,12 +14,27 @@ const contractUpload = async (txtFile) => {
           Authorization: `Bearer ${user.token}`,
         },
       }
-    );    
+    );
     return response.data;
   } catch (error) {
     throw new Error(error.response.data.upload);
   }
 };
 
-const contractsService = { contractUpload };
+const getContracts = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const response = await axios.get(
+    API_ENDPOINT + "transactions/contract/list/",
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${user.token}`,
+      },
+    }
+  );
+  console.log(response);
+  return response;
+};
+
+const contractsService = { contractUpload, getContracts };
 export default contractsService;

@@ -8,6 +8,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
+import Contracts from "./pages/Contracts/Contracts";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -19,7 +21,15 @@ function App() {
           <Routes>
             <Route
               path={"/"}
-              element={ user ? <Home /> : <Navigate to="/login" />}
+              element={user ? <Home /> : <Navigate to="/login" />}
+            />
+            <Route
+              path={"/contracts"}
+              element={user ? <Contracts /> : <Navigate to="/login" />}
+            />
+            <Route
+              path={"/dashboard"}
+              element={user ? <Dashboard /> : <Navigate to="/login" />}
             />
             <Route path={"/login"} element={<Login />} />
             <Route path={"/register"} element={<Register />} />

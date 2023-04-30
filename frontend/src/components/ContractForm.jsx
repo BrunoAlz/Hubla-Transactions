@@ -2,7 +2,6 @@ import { fileUpload, reset } from "../slices/contracts/contractsSlice";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 
 const ContractForm = () => {
   const [upload, setUpload] = useState(null);
@@ -39,16 +38,18 @@ const ContractForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        className="form-control "
-        type="file"
-        accept=".txt"
-        onChange={handleFile}
-      />
-      <div className="text-center">
-        <button className="btn btn-success btn-sm " type="submit">
-          Submit
-        </button>
+      <div className="row">
+        <div className="col-6">
+          <input
+            className="form-control "
+            type="file"
+            accept=".txt"
+            onChange={handleFile}
+          />
+        </div>
+        <div className="col-6">
+          <button className="btn btn-success btn-sm">Submit</button>
+        </div>
       </div>
       {isLoading && "ENVIADO!"}
     </form>

@@ -3,6 +3,7 @@ import contractsService from "../../services/contracts/contractsService";
 
 const initialState = {
   upload: [],
+  contracts: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -25,18 +26,26 @@ export const fileUpload = createAsyncThunk(
   }
 );
 
+export const contractsList = createAsyncThunk(
+  "contracts/listAll",
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await contractsService.getContracts(token);
+    console.log(data.data);
+    if (data.data) {
+      return thunkAPI.fulfillWithValue(data.data);
+    } else {
+      const message = data;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
-
-export const fileUploadSlice = createSlice({
+export const contractsSlice = createSlice({
   name: "fileUpload",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.isSuccess = false;
-      state.message = "";
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -47,10 +56,26 @@ export const fileUploadSlice = createSlice({
       .addCase(fileUpload.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.isError = null;
+        state.isError = false;
         state.message = action.payload;
       })
       .addCase(fileUpload.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(contractsList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(contractsList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = action.payload;
+        state.contracts = action.payload;
+      })
+      .addCase(contractsList.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
@@ -59,5 +84,5 @@ export const fileUploadSlice = createSlice({
   },
 });
 
-export const { reset } = fileUploadSlice.actions;
-export default fileUploadSlice.reducer;
+export const { reset } = contractsSlice.actions;
+export default contractsSlice.reducer;

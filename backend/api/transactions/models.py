@@ -3,6 +3,7 @@ from core.models import User
 from django.urls import reverse
 from core.utils.file_path import upload_documentos
 from core.utils.balance_formater import balance_formater
+from django.core.validators import FileExtensionValidator
 
 
 class Contract(models.Model):
@@ -23,7 +24,8 @@ class Contract(models.Model):
 
     upload = models.FileField(
         'Document',
-        upload_to=upload_documentos
+        upload_to=upload_documentos,
+        validators=[FileExtensionValidator(allowed_extensions=["txt"])]
     )
 
     status = models.CharField(
