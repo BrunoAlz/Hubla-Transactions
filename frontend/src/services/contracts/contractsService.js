@@ -38,7 +38,7 @@ const getContracts = async () => {
 const getContractTransactions = async (contract_id) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const response = await axios.get(
-    API_ENDPOINT + "transactions/contract/list/",
+    API_ENDPOINT + `transactions/contract/${contract_id}`,
     {
       headers: {
         "Content-Type": "multipart/form-data",

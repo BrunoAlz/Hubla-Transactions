@@ -4,6 +4,7 @@ import contractsService from "../../services/contracts/contractsService";
 const initialState = {
   upload: [],
   contracts: [],
+  transactions: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -31,9 +32,26 @@ export const contractsList = createAsyncThunk(
   async (_, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
     const data = await contractsService.getContracts(token);
-    console.log(data.data);
+
     if (data.data) {
       return thunkAPI.fulfillWithValue(data.data);
+    } else {
+      const message = data;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const contractTransactions = createAsyncThunk(
+  "contracts/details",
+  async (contract_id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await contractsService.getContractTransactions(
+      contract_id,
+      token
+    );
+    if (data) {
+      return thunkAPI.fulfillWithValue(data);
     } else {
       const message = data;
       return thunkAPI.rejectWithValue(message);
@@ -76,6 +94,23 @@ export const contractsSlice = createSlice({
         state.contracts = action.payload;
       })
       .addCase(contractsList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(contractTransactions.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(contractTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = action.payload;
+        state.transactions = action.payload;
+      })
+      .addCase(contractTransactions.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
