@@ -19,7 +19,7 @@ const ContractsTransactions = () => {
       navigate(notFound404);
     }
     dispatch(contractTransactions(contract_id));
-  }, [isError]);
+  }, []);
 
   return (
     <div>

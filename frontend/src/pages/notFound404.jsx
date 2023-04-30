@@ -21,7 +21,12 @@ const notFound404 = () => {
             <h1 className="display-3 fw-bold ls-tight">
               Not Found<span className="text-green">.</span>
             </h1>
-            <span className="fw-bold">Hubla Transactions</span>
+            <Link
+              to={"/contracts"}
+              className="fw-bold text-decoration-none text-dark"
+            >
+              Hubla Transactions - <span className="text-primary">BACK</span>
+            </Link>
           </div>
         </div>
       </div>
