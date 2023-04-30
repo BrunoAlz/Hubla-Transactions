@@ -1,4 +1,4 @@
-import Table from "../../components/Table";
+import ContractTable from "../../components/ContractTable";
 import ContractForm from "../../components/ContractForm";
 import Layout from "../Layout";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const Contracts = () => {
         <div className="row">
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1>Contracts</h1>
-            {contracts ? <Table props={contracts} /> : "A"}
+            {contracts ? <ContractTable props={contracts} /> : "A"}
           </main>
         </div>
       </div>
