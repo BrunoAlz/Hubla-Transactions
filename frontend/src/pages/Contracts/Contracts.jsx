@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import { contractsList } from "../../slices/contracts/contractsSlice";
 import { toast } from "react-toastify";
 
-
-
 const Contracts = () => {
   const { contracts, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.contracts
@@ -15,6 +13,7 @@ const Contracts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
 
     dispatch(contractsList());
   }, []);

@@ -54,16 +54,22 @@ class ContractDetailAPIView(APIView):
     permission_classes = [IsOwnerOrRedirect]
 
     def get_object(self, pk):
-        try:
+        check = Contract.objects.filter(
+            pk=pk, creator_id=self.request.user).exists()
+        if check:
             contract = Contract.objects.get(
                 pk=pk, creator_id=self.request.user)
+
             self.check_object_permissions(self.request, contract)
+
             return contract
-        except Contract.DoesNotExist:
-            raise exceptions.NotFound(
-                {'error': 'That contract do not exists or it doesnt belows to you'})
+        else:
+            return None
 
     def get(self, request, pk, format=None):
         contract = self.get_object(pk)
+        if not contract:
+            return Response({'error': 'That contract do not exists or it doesnt belows to you'})
+
         serializer = ContractDetailSerializer(contract)
         return Response(serializer.data)

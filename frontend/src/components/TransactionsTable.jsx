@@ -1,4 +1,5 @@
-const TransactionsTable = ({ props }) => {
+const TransactionsTable = ({props}) => {
+
   return (
     <div>
       <table className="table table-striped table-sm table-hover text-center mt-5">

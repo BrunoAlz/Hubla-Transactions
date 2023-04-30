@@ -50,10 +50,10 @@ export const contractTransactions = createAsyncThunk(
       contract_id,
       token
     );
-    if (data) {
-      return thunkAPI.fulfillWithValue(data);
+    if (!data.data.error) {
+      return thunkAPI.fulfillWithValue(data.data.transactio_contract);
     } else {
-      const message = data;
+      const message = data.data.error;
       return thunkAPI.rejectWithValue(message);
     }
   }
