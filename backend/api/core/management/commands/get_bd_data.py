@@ -10,6 +10,7 @@ from django.core.management import call_command
 
 
 class Command(BaseCommand):
+
     """
         Esta função é um command do proprio django, que pode ser chamado no
         terminal com o comando `python manage.py XXXXXXXX.py` ele execulta
@@ -40,6 +41,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(
                     f"O Contrato: {data.id} foi Processado!"))
 
-        # Caso a verificação falhe, imprime a mensagem.
-        self.stdout.write(self.style.WARNING(
-            f"Não há transações para serem processadas"))
+        else:
+            # Caso a verificação falhe, imprime a mensagem.
+            self.stdout.write(self.style.WARNING(
+                f"Não há transações para serem processadas"))

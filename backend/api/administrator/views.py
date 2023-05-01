@@ -26,9 +26,7 @@ class RegisterUserView(APIView):
             serializer.save()
             # Retorna os dados
             return Response({"success": "User registred!"}, status=status.HTTP_200_OK)
-        else:
-            # Se não Retorna os erros, e o status.
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginUserAPIView(APIView):

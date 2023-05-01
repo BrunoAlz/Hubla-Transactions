@@ -151,14 +151,8 @@ class Report(models.Model):
         on_delete=models.DO_NOTHING
     )
 
-    seller = models.ForeignKey(
-        Seller,
-        on_delete=models.DO_NOTHING
-    )
-
-    balance = models.BigIntegerField(
-        'balance',
-        default=0
+    report_data = models.JSONField(
+        'report data'
     )
 
     class Meta:
