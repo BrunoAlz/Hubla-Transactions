@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Contract, Transaction
+from .models import Contract, Transaction, TransactionType
 import os
 
 
@@ -39,11 +39,27 @@ class ContractListSerializer(serializers.ModelSerializer):
                   'created_at', 'upload', 'status']
 
 
+class TransactionsTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransactionType
+        fields = '__all__'
+
+
 class ContractTransactionsSerializer(serializers.ModelSerializer):
+    description = serializers.CharField(
+        source='type.description', read_only=True)
+
+    nature = serializers.CharField(
+        source='type.nature', read_only=True)
+
+    signal = serializers.CharField(
+        source='type.signal', read_only=True)
+
     class Meta:
         model = Transaction
         fields = ['id', 'type', 'contract',
-                  'date', 'product', 'price', 'seller']
+                  'date', 'product', 'price', 'seller', 'description',
+                  'nature', 'signal']
 
 
 class ContractDetailSerializer(serializers.ModelSerializer):

@@ -68,8 +68,8 @@ class ContractDetailAPIView(APIView):
 
     def get(self, request, pk, format=None):
         contract = self.get_object(pk)
-        if not contract:
+        if contract is None:
             return Response({'error': 'That contract do not exists or it doesnt belows to you'})
-
-        serializer = ContractDetailSerializer(contract)
-        return Response(serializer.data)
+        else:
+            serializer = ContractDetailSerializer(contract)
+            return Response(serializer.data)

@@ -40,10 +40,12 @@ const ContractsTransactions = () => {
                   <thead className="table-dark">
                     <tr className="fw-bold fs-5">
                       <th>N°</th>
+                      <th>Nature</th>
+                      <th>Description</th>
                       <th>Date</th>
-                      <th>File</th>
-                      <th>Owner</th>
-                      <th>Status</th>
+                      <th>Product</th>
+                      <th>Price</th>
+                      <th>Seller</th>
                       <th>Type</th>
                     </tr>
                   </thead>
@@ -51,11 +53,13 @@ const ContractsTransactions = () => {
                     {transactions.map((transaction) => (
                       <tr key={transaction.id}>
                         <th scope="row">{transaction.id}</th>
+                        <td>{transaction.nature}</td>
+                        <td>{transaction.description}</td>
                         <td>{transaction.date}</td>
                         <td>{transaction.product}</td>
                         <td>{transaction.price}</td>
                         <td>{transaction.seller}</td>
-                        <td>{transaction.type}</td>
+                        <td>{transaction.signal}</td>
                       </tr>
                     ))}
                   </tbody>
