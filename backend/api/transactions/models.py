@@ -142,3 +142,28 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f'{self.type} - {self.date} - {self.product} - {self.price} - {self.seller}'
+
+
+class Report(models.Model):
+
+    contract = models.ForeignKey(
+        Contract,
+        on_delete=models.DO_NOTHING
+    )
+
+    seller = models.ForeignKey(
+        Seller,
+        on_delete=models.DO_NOTHING
+    )
+
+    balance = models.BigIntegerField(
+        'balance',
+        default=0
+    )
+
+    class Meta:
+        verbose_name = ("report")
+        verbose_name_plural = ("reports")
+
+    def __str__(self):
+        return self.name

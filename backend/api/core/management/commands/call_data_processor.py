@@ -11,6 +11,16 @@ from django.db import DatabaseError, transaction as transaction_atomic
 class Command(BaseCommand):
     help = 'Call the process data function to extract data from txt and save on DB'
 
+    def create_producer_and_affiliate(self, id_seller: int, seller_name: str) -> None:
+        if id_seller == 1:
+            Seller.objects.update_or_create(
+                name=seller_name, role="Producer")
+        elif id_seller == 2:
+            Seller.objects.update_or_create(
+                name=seller_name, role="Affiliate")
+        else:
+            pass
+
     def add_arguments(self, parser):
         """Recebe os argumentos passados pelo `get_bd_data`
         data.upload.path, int(data.id) """
@@ -28,6 +38,8 @@ class Command(BaseCommand):
 
         # Cria uma lista vasia que ira guardar os objetos Transactions
         transactions = []
+        sales = {}
+        affiliate = {}
 
         # Com abre o arquivo utilizando o Context Manager With no modo 'R'EAD
         with open(file, 'r') as file:
@@ -51,18 +63,30 @@ class Command(BaseCommand):
                 price = int(line[56:66])
                 # Extrai o Nome do vendedor
                 seller = line[66:86].strip()
+                person = seller.replace(" ", "_")
+
+                self.create_producer_and_affiliate(type_id, seller)
+
+                if person not in sales:
+                    sales[person] = {}
+
+                if product not in affiliate:
+                    affiliate[product] = {
+                        'affiliate': person, 'recivied': 0, 'sell': 0}
 
                 if type_id == 1:
-                    print("seller", seller)
-                    Seller.objects.update_or_create(
-                        name=seller, role="Producer")
-                elif type_id == 2:
-                    print("seller", seller)
-                    Seller.objects.update_or_create(
-                        name=seller, role="Affiliate")
-                else:
-                    pass
+                    if product not in sales[person]:
+                        sales[person][product] = {
+                            'person': person, 'price': 0}
 
+                    sales[person][product]['price'] += price
+
+                elif type_id == 2:
+                    if product in affiliate:
+                        affiliate[product]['sell'] += price
+
+                elif type_id == 4:
+                    affiliate[product]['recivied'] += price
                 """
                     Após fazer os tratamentos necessários, para cada linha
                     do Txt cria uma instância do Objeto `Transaction` que é 
@@ -79,6 +103,29 @@ class Command(BaseCommand):
                 # Após a criação do Objeto, faz o append na lista de transactions
                 transactions.append(transaction)
         # Inicia um bloco Try para tentar fazer o Insert no banco
+            report_total = []
+
+            for person, product in sales.items():
+                for product_name, struct in product.items():
+                    total_sell_affiliate = 0
+                    total_comission_payed = 0
+                    if product_name in affiliate:
+                        total_sell_affiliate = affiliate[product_name]['sell']
+                        total_comission_payed = affiliate[product_name]['recivied']
+
+                    total_bruto = struct['price'] + total_sell_affiliate
+                    result = {
+                        'total_sell_affiliate': total_sell_affiliate,
+                        'total_comission_payed': total_comission_payed,
+                        'total': total_bruto,
+                        'liquido': total_bruto - total_comission_payed,
+                        'product': product_name,
+                        'total_sell_productor': struct['price'],
+                        'peson': person,
+
+                    }
+                    report_total.append(result)
+
         try:
             # O Bulk create irá comitar a transação inteira de uma vez.
             # Escrevendo apenas uma consulta.
