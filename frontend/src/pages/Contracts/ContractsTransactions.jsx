@@ -30,7 +30,9 @@ const ContractsTransactions = () => {
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             {transactions.length > 0 ? (
               <div className="">
-                <h1 className="mt-3">Contract N° {contract_id}</h1>
+                <h1 className="mt-3 text-center">
+                  Transactions - Contract N° {contract_id}
+                </h1>
                 <Link className="btn btn-primary" to={"/contracts/"}>
                   BACK
                 </Link>
@@ -66,7 +68,7 @@ const ContractsTransactions = () => {
                 </h3>
                 <Link className="btn btn-primary" to={"/contracts/"}>
                   BACK
-                </Link>                
+                </Link>
               </div>
             )}
           </main>

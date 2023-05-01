@@ -1,10 +1,8 @@
-import ContractForm from "../../components/ContractForm";
 import Layout from "../Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { contractsList } from "../../slices/contracts/contractsSlice";
-import ContractStatus from "../../components/ContractStatus";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 const Contracts = () => {
   const { contracts, isLoading, isError, isSuccess, message } = useSelector(
@@ -22,16 +20,17 @@ const Contracts = () => {
       <Layout />
       <div className="container-fluid">
         <div className="row">
-          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1>Contracts</h1>
-            <table className="table table-striped table-sm table-hover text-center mt-5">
-              <thead>
+          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-2">
+            <h1 className="text-center">Contracts - {contracts.length}</h1>
+            <table className="table table-sm table-hover text-center mt-2">
+              <thead className="table-primary">
                 <tr className="fw-bold fs-5">
                   <th>N°</th>
                   <th>Date</th>
                   <th>File</th>
                   <th>Owner</th>
                   <th>Status</th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -44,10 +43,22 @@ const Contracts = () => {
                       {contract.first_name} {contract.last_name}
                     </td>
                     <td>
-                      <ContractStatus props={contract.status} />
+                      {contract.status == 1 ? (
+                        <span className="badge text-bg-danger">Pending</span>
+                      ) : contract.status == 2 ? (
+                        <span className="badge text-bg-warning">
+                          Processing..
+                        </span>
+                      ) : (
+                        <span className="badge text-bg-success">Processed</span>
+                      )}
                     </td>
                     <td>
-                      <Link to={`${contract.id}`}>Transactions</Link>
+                      {contract.status == 3 ? (
+                        <Link to={`${contract.id}`}>Transactions</Link>
+                      ) : (
+                      ""
+                      )}
                     </td>
                   </tr>
                 ))}
