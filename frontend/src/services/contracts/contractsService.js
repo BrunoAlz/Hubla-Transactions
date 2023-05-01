@@ -27,7 +27,7 @@ const getContracts = async () => {
     API_ENDPOINT + "transactions/contract/list/",
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
       },
     }
@@ -41,7 +41,7 @@ const getContractTransactions = async (contract_id) => {
     API_ENDPOINT + `transactions/contract/${contract_id}`,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
       },
     }

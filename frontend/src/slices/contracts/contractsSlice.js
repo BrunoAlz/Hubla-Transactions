@@ -51,8 +51,13 @@ export const contractTransactions = createAsyncThunk(
       token
     );
     if (!data.data.error) {
+      console.log("IF");
+      console.log(data);
       return thunkAPI.fulfillWithValue(data.data.transactio_contract);
     } else {
+      console.log("ELSE");
+      console.log(data);
+
       const message = data.data.error;
       return thunkAPI.rejectWithValue(message);
     }

@@ -2,22 +2,23 @@ import Layout from "../Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { contractTransactions } from "../../slices/contracts/contractsSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import TransactionsTable from "../../components/TransactionsTable";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import notFound404 from "../notFound404";
 
 const ContractsTransactions = () => {
   const { transactions, contracts, isLoading, isError, isSuccess, message } =
     useSelector((state) => state.contracts);
+
   const dispatch = useDispatch();
+
   const { contract_id } = useParams();
-  const navigate = useNavigate();
+
   useEffect(() => {
     if (isError) {
       toast.error(message);
-      navigate(notFound404);
     }
+
     dispatch(contractTransactions(contract_id));
   }, []);
 
@@ -27,15 +28,51 @@ const ContractsTransactions = () => {
       <div className="container-fluid">
         <div className="row">
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1 className="mt-3">
-              Contract N° {contract_id} - Register date {contracts}
-            </h1>
-            {transactions ? <TransactionsTable props={transactions} /> : "A"}
+            {transactions.length > 0 ? (
+              <div className="">
+                <h1 className="mt-3">Contract N° {contract_id}</h1>
+                <Link className="btn btn-primary" to={"/contracts/"}>
+                  BACK
+                </Link>
+                <table className="table table-striped table-sm table-hover text-center mt-3">
+                  <thead className="table-dark">
+                    <tr className="fw-bold fs-5">
+                      <th>N°</th>
+                      <th>Date</th>
+                      <th>File</th>
+                      <th>Owner</th>
+                      <th>Status</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((transaction) => (
+                      <tr key={transaction.id}>
+                        <th scope="row">{transaction.id}</th>
+                        <td>{transaction.date}</td>
+                        <td>{transaction.product}</td>
+                        <td>{transaction.price}</td>
+                        <td>{transaction.seller}</td>
+                        <td>{transaction.type}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="mt-3 text-center">
+                <h3 className="display-1 text-danger">
+                  No transactions found.
+                </h3>
+                <Link className="btn btn-primary" to={"/contracts/"}>
+                  BACK
+                </Link>                
+              </div>
+            )}
           </main>
         </div>
       </div>
     </div>
   );
 };
-
 export default ContractsTransactions;
