@@ -148,7 +148,8 @@ class Report(models.Model):
 
     contract = models.ForeignKey(
         Contract,
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        related_name='report'
     )
 
     report_data = models.JSONField(

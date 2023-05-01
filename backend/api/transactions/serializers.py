@@ -64,7 +64,9 @@ class ContractTransactionsSerializer(serializers.ModelSerializer):
 
 class ContractDetailSerializer(serializers.ModelSerializer):
     transactio_contract = ContractTransactionsSerializer(many=True)
+    report_data = serializers.CharField(
+        source='report.report_data', read_only=True)
 
     class Meta:
         model = Contract
-        fields = ['transactio_contract']
+        fields = ['transactio_contract', 'report_data']
