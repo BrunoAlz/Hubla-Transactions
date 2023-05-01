@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Contract, Transaction, TransactionType
+from .models import Contract, Transaction, TransactionType, Report
 import os
 
 
@@ -62,11 +62,23 @@ class ContractTransactionsSerializer(serializers.ModelSerializer):
                   'nature', 'signal']
 
 
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = '__all__'
+
+
 class ContractDetailSerializer(serializers.ModelSerializer):
     transactio_contract = ContractTransactionsSerializer(many=True)
-    report_data = serializers.CharField(
-        source='report.report_data', read_only=True)
+    report = serializers.SerializerMethodField()
 
     class Meta:
         model = Contract
-        fields = ['transactio_contract', 'report_data']
+        fields = ['transactio_contract', 'report']
+
+    def get_report(self, obj):
+        report = obj.report.first()
+        if report:
+            return ReportSerializer(report).data
+        else:
+            return None

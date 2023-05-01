@@ -159,6 +159,3 @@ class Report(models.Model):
     class Meta:
         verbose_name = ("report")
         verbose_name_plural = ("reports")
-
-    def __str__(self):
-        return self.name
