@@ -86,9 +86,6 @@ class TransactionType(models.Model):
     def __str__(self):
         return f'{self.type} - {self.description} - {self.nature} - {self.signal}'
 
-    def get_absolute_url(self):
-        return reverse("TransactionType_detail", kwargs={"pk": self.pk})
-
 
 class Seller(models.Model):
 
@@ -97,16 +94,13 @@ class Seller(models.Model):
         max_length=20
     )
 
-    balance = models.PositiveIntegerField(
-        null=True, blank=True
+    role = models.CharField(
+        'Seller role',
+        max_length=20
     )
 
     def __str__(self):
         return f'{self.name}'
-
-    @property
-    def formated_balance(self):
-        return balance_formater(self.balance)
 
 
 class Transaction(models.Model):
@@ -148,6 +142,3 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f'{self.type} - {self.date} - {self.product} - {self.price} - {self.seller}'
-
-    def get_absolute_url(self):
-        return reverse("Transaction_detail", kwargs={"pk": self.pk})

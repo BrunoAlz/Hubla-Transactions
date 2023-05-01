@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from transactions.models import Contract
-from transactions.models import TransactionType, Transaction
+from transactions.models import TransactionType, Transaction, Seller
 from django.db import DatabaseError, transaction as transaction_atomic
 
 # REFERÊNCIA
@@ -51,6 +51,18 @@ class Command(BaseCommand):
                 price = int(line[56:66])
                 # Extrai o Nome do vendedor
                 seller = line[66:86].strip()
+
+                if type_id == 1:
+                    print("seller", seller)
+                    Seller.objects.update_or_create(
+                        name=seller, role="Producer")
+                elif type_id == 2:
+                    print("seller", seller)
+                    Seller.objects.update_or_create(
+                        name=seller, role="Affiliate")
+                else:
+                    pass
+
                 """
                     Após fazer os tratamentos necessários, para cada linha
                     do Txt cria uma instância do Objeto `Transaction` que é 
