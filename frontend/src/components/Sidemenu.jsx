@@ -15,16 +15,6 @@ const Sidemenu = () => {
             Olá {user.first_name} {user.last_name}
           </h4>
           <li className="nav-item fs-4  mx-3">
-            <NavLink
-              to="/dashboard"
-              className="nav-link"
-              aria-current="page"
-            >
-              <span data-feather="home" className="align-text-bottom"></span>
-              Dashboard <i className="bi bi-pie-chart"></i>
-            </NavLink>
-          </li>
-          <li className="nav-item fs-4  mx-3">
             <NavLink to="/contracts" className="nav-link">
               <span data-feather="file" className="align-text-bottom"></span>
               Contracts <i className="bi bi-file-text"></i>
@@ -33,6 +23,8 @@ const Sidemenu = () => {
         </ul>
       </div>
     </nav>
+
+    
   );
 };
 

@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Contracts from "./pages/Contracts/Contracts";
 import ContractsTransactions from "./pages/Contracts/ContractsTransactions";
-import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -24,10 +23,6 @@ function App() {
             <Route
               path={"/"}
               element={user ? <Home /> : <Navigate to="/login" />}
-            />
-            <Route
-              path={"/dashboard"}
-              element={user ? <Dashboard /> : <Navigate to="/login" />}
             />
             <Route
               path={"/contracts"}
