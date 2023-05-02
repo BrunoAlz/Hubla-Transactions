@@ -2,10 +2,11 @@ import Layout from "../Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { contractsList } from "../../slices/contracts/contractsSlice";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Contracts = () => {
-  const { contracts, isLoading, isError, isSuccess, message } = useSelector(
+  const { contracts, isError, isLoading, isSuccess, message } = useSelector(
     (state) => state.contracts
   );
 
@@ -57,7 +58,7 @@ const Contracts = () => {
                       {contract.status == 3 ? (
                         <Link to={`${contract.id}`}>Transactions</Link>
                       ) : (
-                      ""
+                        ""
                       )}
                     </td>
                   </tr>

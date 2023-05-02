@@ -19,8 +19,8 @@ export const fileUpload = createAsyncThunk(
 
     const data = await contractsService.contractUpload(fileUpload, token);
 
-    if (data.success) {
-      return thunkAPI.fulfillWithValue(data);
+    if (data.success) {      
+      return thunkAPI.fulfillWithValue(data.success);
     } else {
       const message = data.error.upload[0];
       return thunkAPI.rejectWithValue(message);
@@ -51,8 +51,8 @@ export const contractTransactions = createAsyncThunk(
       contract_id,
       token
     );
-    
-    if (!data.data.error) {      
+
+    if (!data.data.error) {
       return thunkAPI.fulfillWithValue(data.data);
     } else {
       const message = data.data.error;
@@ -65,7 +65,11 @@ export const contractsSlice = createSlice({
   name: "fileUpload",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -87,12 +91,12 @@ export const contractsSlice = createSlice({
       })
       .addCase(contractsList.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
       })
       .addCase(contractsList.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isSuccess = false;
         state.isError = false;
-        state.message = action.payload;
         state.contracts = action.payload;
       })
       .addCase(contractsList.rejected, (state, action) => {
@@ -112,8 +116,6 @@ export const contractsSlice = createSlice({
         state.message = action.payload;
         state.transactions = action.payload.transactio_contract;
         state.reports = JSON.parse(action.payload.report.report_data);
-        console.log(state.reports);
-  
       })
       .addCase(contractTransactions.rejected, (state, action) => {
         state.isLoading = false;
