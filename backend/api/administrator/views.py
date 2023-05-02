@@ -48,10 +48,7 @@ class LoginUserAPIView(APIView):
     """
     This view allows users to log in to the system.
 
-    Attributes:
-        None
-
-    Methods:
+        Methods:
         post(request):
         Receives user data in the request body and authenticates
         the user using their email and password.
