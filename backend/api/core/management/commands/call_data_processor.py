@@ -129,12 +129,12 @@ class Command(BaseCommand):
                         'total_commission_paid': total_commission_paid,
                         'gross_total': gross_total,
                         'liquid': gross_total - total_commission_paid,
-                        'affiliates': affiliate_final_balance[product_name] if product_name in affiliate_final_balance else None
+                        'affiliates': affiliate_final_balance[product_name] if product_name in affiliate_final_balance else {}
                     }
 
                     report_total.append(result)
             data_json = json.dumps(report_total)
-
+        print(data_json)
         try:
             Report.objects.update_or_create(
                 contract_id=contract_id,

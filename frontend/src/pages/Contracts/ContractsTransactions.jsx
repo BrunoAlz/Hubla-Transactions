@@ -21,9 +21,6 @@ const ContractsTransactions = () => {
 
   const { contract_id } = useParams();
 
-  const producer = reports.slice(2, 3);
-  console.log(producer);
-
   useEffect(() => {
     if (isError) {
       toast.error(message);
@@ -103,6 +100,31 @@ const ContractsTransactions = () => {
                             <td>{report.liquid}</td>
                           </tr>
                         ))}
+                      </tbody>
+                    </table>
+                    <h3 className="text-center">Final Balance Affiliate</h3>
+                    <table className="table table-striped table-fluid table-sm table-hover text-center mt-3">
+                      <thead className="table-dark">
+                        <tr className="fw-bold fs-5">
+                          <th>Affiliate</th>
+                          <th>Product</th>
+                          <th>Final Balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reports.map((report) => {
+                          return Object.keys(report.affiliates).map(
+                            (affiliate_name) => {
+                              return (
+                                <tr key={affiliate_name}>
+                                  <td>{affiliate_name}</td>
+                                  <td>{report.product}</td>
+                                  <td>{report.affiliates[affiliate_name]}</td>
+                                </tr>
+                              );
+                            }
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
