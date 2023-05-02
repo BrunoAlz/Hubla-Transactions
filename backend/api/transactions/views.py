@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from core.api_permissions import IsOwnerOrRedirect
 from .serializers import (ContractRegisterSerializer,
                           ContractListSerializer, ContractDetailSerializer)
 from administrator.authentication import JWTAuthentucation
@@ -51,7 +50,6 @@ class ContractDetailAPIView(APIView):
     Retrieve, update or delete a snippet instance.
     """
     authentication_classes = [JWTAuthentucation]
-    permission_classes = [IsOwnerOrRedirect]
 
     def get_object(self, pk):
         check = Contract.objects.filter(
