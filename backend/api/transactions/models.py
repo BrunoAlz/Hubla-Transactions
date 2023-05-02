@@ -6,7 +6,11 @@ from datetime import datetime
 
 
 class Contract(models.Model):
-
+    """
+        This model will be the database table, responsible for storing
+        the contracts that will be a reference for the transactions,
+        since a contract can have N transactions.
+    """
     STATUS = (
         ("1", "Pendente"),
         ("2", "Processando"),
@@ -36,6 +40,7 @@ class Contract(models.Model):
     class Meta:
         verbose_name = "Contract"
         verbose_name_plural = "Contracts"
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.creator.first_name} {self.creator.last_name}"
@@ -47,7 +52,10 @@ class Contract(models.Model):
 
 
 class TransactionType(models.Model):
-
+    """
+        This model will be the database table, responsible
+        for storing the types of transactions
+    """
     NATURE = (
         ("Entrada", "Entrada"),
         ("Saida", "Saída"),
@@ -86,24 +94,11 @@ class TransactionType(models.Model):
         return f'{self.type} - {self.description} - {self.nature} - {self.signal}'
 
 
-class Seller(models.Model):
-
-    name = models.CharField(
-        'Seller name',
-        max_length=20
-    )
-
-    role = models.CharField(
-        'Seller role',
-        max_length=20
-    )
-
-    def __str__(self):
-        return f'{self.name}'
-
-
 class Transaction(models.Model):
-
+    """
+        This is the main model, which will store the
+        transactions belonging to the contracts
+    """
     type = models.ForeignKey(
         TransactionType,
         on_delete=models.DO_NOTHING,
@@ -150,7 +145,10 @@ class Transaction(models.Model):
 
 
 class Report(models.Model):
-
+    """
+        This model stores a summary report on the data,
+        to display the final balance of the owner and affiliates
+    """
     contract = models.ForeignKey(
         Contract,
         on_delete=models.DO_NOTHING,
