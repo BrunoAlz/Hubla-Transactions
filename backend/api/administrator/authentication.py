@@ -1,60 +1,84 @@
-import jwt, datetime
+import jwt
+import datetime
 from rest_framework import exceptions
-from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.authentication import  get_authorization_header
 from core.models import User
+from decouple import config
 
 class JWTAuthentucation:
     """
-    Cria o Token JWT utilizando a Lib: https://pyjwt.readthedocs.io/en/stable/
-    Authentica o usuário utilizando a função Authenticate
+    Provides authentication using JSON Web Tokens (JWT).
+
+    This class generates and decodes JWT tokens using the PyJWT library
+    (https://pyjwt.readthedocs.io/en/stable/).
+    It also provides an `authenticate` method that extracts the token
+    from the user's request, decodes it,
+    and returns the user associated with the token if the
+    authentication is successful.
+
+    Methods:
+        `authenticate(request):`
+        Authenticates the user using the token provided in the request header.
+        Returns the user associated with the token if the authentication is
+        successful. Otherwise, raises an `AuthenticationFailed` exception.
+
+        `generate_jwt(id):`
+        Generates a new JWT token for the given user id. The token contains
+        the user id, an expiration time, and an issued-at time. Returns the
+        encoded JWT token as a string.
     """
     def authenticate(self, request):
         """
-            Recebe o token na requisição do usuário se authentica, permite que ele
-            acesse as views authenticadas.      
+        Authenticates the user using the token provided in the request header.
+        Returns the user associated with the token if the authentication is
+        successful. Otherwise, raises an `AuthenticationFailed` exception.
         """
-        # Obter o token JWT da Requisição
+        # Get the token in the Request sent by the user
         auth_header = get_authorization_header(request).decode('utf-8')
         if not auth_header or 'Bearer' not in auth_header:
             return None
         token = auth_header.split(' ')[1]
 
-        # Tenta Decodificar o Token e extrair o id do usuário
+        # Decode the Token and extract the user id
         try:
-            payload = jwt.decode(token, "CHAVE_SECRETA_LEMBRAR_DE_MUDAR", algorithms=['HS256'])
+            payload = jwt.decode(token, f"{config('SECRET_KEY')}", algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed('Token expirado.')
+            raise exceptions.AuthenticationFailed('Expired token.')
         except jwt.InvalidTokenError:
-            raise exceptions.AuthenticationFailed('Token inválido.')
-        # Extrai o id do usuário
+            raise exceptions.AuthenticationFailed('Invalid token.')
+        
+        # Extract the user id
         user_id = payload['user_id']
 
-        # Faz a query no banco para para tentar buscar o usuário
+        # Query the database to try to find the user
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed('Usuário não encontrado.')
+            raise exceptions.AuthenticationFailed('User not found.')
 
         return (user, None)
 
-    # Método para gerar o TOKEN 
+    # Method to generate the TOKEN
     @staticmethod
     def generate_jwt(id):
         """
-            Método para gerar o JWT https://pyjwt.readthedocs.io/en/stable/#example-usage
+        Generates a new JWT token for the given user id.
+
+        `Args:`
+            id (int): The id of the user to associate with the token.
+
+        `Returns:`
+            str: The encoded JWT token as a string.
         """
-        #Cria o Payload para montar o JTW
+
+        # Create the Payload to assemble the JTW
         payload = {
-            # Passa o Id do Usuário
+            # User Id
             'user_id': id,
-            # Passa a Data de Expiração
             # “exp” (Expiration Time) Claim
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-            # passa a outra data
             # “iat” (Issued At) Claim
             'iat': datetime.datetime.utcnow(),
         }
 
-        # CRIAR A CHAVE SECRETA NO .env!!!!
-        return jwt.encode(payload, "CHAVE_SECRETA_LEMBRAR_DE_MUDAR", algorithm="HS256")
-        
+        return jwt.encode(payload, f"{config('SECRET_KEY')}", algorithm="HS256")

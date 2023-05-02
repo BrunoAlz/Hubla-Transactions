@@ -13,18 +13,17 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import sys
 import os
 from pathlib import Path
+from decouple import config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, os.path.join(BASE_DIR, 'api'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s0!bf6t^6ut6u)$e*e3j+kyrl0**fpl&xciy-1zpmwu!lxm8cs'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = config('SECRET_KEY')
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -84,12 +83,12 @@ WSGI_APPLICATION = 'configurations.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hublatransactions',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USERNAME'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
         "OPTIONS": {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
             'charset': 'utf8mb4',
@@ -98,20 +97,6 @@ DATABASES = {
     }
 }
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'transactions',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-#         'HOST': 'db',
-#         'PORT': '3306',
-#     }
-# }
-
-# Rest Framework - Settings
-# https://www.django-rest-framework.org/api-guide/settings/
 
 REST_FRAMEWORK = {
     # https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication
@@ -157,7 +142,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
 
-# Configurações do CORS - Para que o Front possa acessar livremente o Back
 CORS_ORIGIN_ALLOW_ALL = True
-# Não serão implementados cookies
-# CORS_ALLOW_CREDENTIALS = True
