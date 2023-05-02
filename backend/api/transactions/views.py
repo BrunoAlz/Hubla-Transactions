@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (ContractRegisterSerializer,
                           ContractListSerializer, ContractDetailSerializer)
-from administrator.authentication import JWTAuthentucation
+from user.authentication import JWTAuthentucation
 from rest_framework import permissions
 from rest_framework import exceptions
 from .models import Contract

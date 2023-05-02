@@ -2,7 +2,7 @@ import jwt
 import datetime
 from rest_framework import exceptions
 from rest_framework.authentication import get_authorization_header
-from core.models import User
+from user.models import User
 from decouple import config
 
 

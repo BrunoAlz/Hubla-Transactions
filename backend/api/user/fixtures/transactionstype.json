@@ -1,0 +1,42 @@
+[
+    {
+        "model": "transactions.transactiontype",
+        "pk": 1,
+        "fields": {
+            "type": 1,
+            "description": "Venda Produtor",
+            "nature": "Entrada",
+            "signal": "+"
+        }
+    },
+    {
+        "model": "transactions.transactiontype",
+        "pk": 2,
+        "fields": {
+            "type": 2,
+            "description": "Venda Afiliado",
+            "nature": "Entrada",
+            "signal": "+"
+        }
+    },
+    {
+        "model": "transactions.transactiontype",
+        "pk": 3,
+        "fields": {
+            "type": 3,
+            "description": "Comissão Paga",
+            "nature": "Saida",
+            "signal": "-"
+        }
+    },
+    {
+        "model": "transactions.transactiontype",
+        "pk": 4,
+        "fields": {
+            "type": 4,
+            "description": "Comissão Recebida",
+            "nature": "Entrada",
+            "signal": "+"
+        }
+    }
+]

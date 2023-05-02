@@ -40,10 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'api.administrator',
-    'api.core',
-    'api.transactions',
-    'api.core.management'
+    'user',
+    'core',
+    'transactions',
+    'core.management'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +91,7 @@ DATABASES = {
         'PORT': config('DB_PORT'),
         "OPTIONS": {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1",
-            'charset': 'utf8mb4',
+            'charset': 'utf8',
             "autocommit": True,
         }
     }
@@ -140,6 +140,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'user.User'
 
 CORS_ORIGIN_ALLOW_ALL = True

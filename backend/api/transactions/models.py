@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import User
+from user.models import User
 from core.utils.file_path import upload_documentos
 from django.core.validators import FileExtensionValidator
 from datetime import datetime

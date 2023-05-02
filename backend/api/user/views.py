@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
-from core.models import User
-from core.serializers import UserSerializer
+from user.models import User
+from user.serializers import UserSerializer
 from rest_framework import status
 from .authentication import JWTAuthentucation
 
