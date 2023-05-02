@@ -51,6 +51,7 @@ class Command(BaseCommand):
         transactions = []
         sales = {}
         affiliate = {}
+        affiliate_final_balance = {}
 
         """
             TXT data extraction
@@ -66,28 +67,38 @@ class Command(BaseCommand):
                 product = line[26:56].strip()
                 price = int(line[56:66])
                 seller = line[66:86].strip()
+
                 person = seller.replace(" ", "_")
+                product_key = product.replace(" ", "_").replace("-", "_")
 
                 if person not in sales:
                     sales[person] = {}
 
-                if product not in affiliate:
-                    affiliate[product] = {
+                if product_key not in affiliate:
+                    affiliate[product_key] = {
                         'affiliate': person, 'received': 0, 'sell': 0}
 
                 if type_id == 1:
-                    if product not in sales[person]:
-                        sales[person][product] = {
+                    if product_key not in sales[person]:
+                        sales[person][product_key] = {
                             'person': person, 'price': 0}
 
-                    sales[person][product]['price'] += price
+                    sales[person][product_key]['price'] += price
 
                 elif type_id == 2:
-                    if product in affiliate:
-                        affiliate[product]['sell'] += price
+                    if product_key in affiliate:
+                        affiliate[product_key]['sell'] += price
 
                 elif type_id == 4:
-                    affiliate[product]['received'] += price
+                    affiliate[product_key]['received'] += price
+
+                    if product_key not in affiliate_final_balance:
+                        affiliate_final_balance[product_key] = {}
+
+                    if person not in affiliate_final_balance[product_key]:
+                        affiliate_final_balance[product_key][person] = 0
+
+                    affiliate_final_balance[product_key][person] += price
 
                 transaction = Transaction(
                     type=type,
@@ -101,8 +112,8 @@ class Command(BaseCommand):
 
             report_total = []
 
-            for person, product in sales.items():
-                for product_name, struct in product.items():
+            for person, product_key in sales.items():
+                for product_name, struct in product_key.items():
                     sold_by_affiliate = 0
                     total_commission_paid = 0
                     if product_name in affiliate:
@@ -118,21 +129,22 @@ class Command(BaseCommand):
                         'total_commission_paid': total_commission_paid,
                         'gross_total': gross_total,
                         'liquid': gross_total - total_commission_paid,
-
+                        'affiliates': affiliate_final_balance[product_name] if product_name in affiliate_final_balance else None
                     }
+
                     report_total.append(result)
             data_json = json.dumps(report_total)
 
         try:
-            Report.objects.update_or_create(
-                contract_id=contract_id,
-                report_data=data_json
-            )
+            # Report.objects.update_or_create(
+            #     contract_id=contract_id,
+            #     report_data=data_json
+            # )
 
-            Transaction.objects.bulk_create(transactions)
+            # Transaction.objects.bulk_create(transactions)
 
-            Contract.objects.filter(id=contract_id).update(
-                status=3)
+            # Contract.objects.filter(id=contract_id).update(
+            #     status=3)
 
             self.stdout.write(self.style.SUCCESS("Processamento Finalizado!"))
         except DatabaseError:
