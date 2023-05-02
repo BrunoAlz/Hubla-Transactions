@@ -136,15 +136,15 @@ class Command(BaseCommand):
             data_json = json.dumps(report_total)
 
         try:
-            # Report.objects.update_or_create(
-            #     contract_id=contract_id,
-            #     report_data=data_json
-            # )
+            Report.objects.update_or_create(
+                contract_id=contract_id,
+                report_data=data_json
+            )
 
-            # Transaction.objects.bulk_create(transactions)
+            Transaction.objects.bulk_create(transactions)
 
-            # Contract.objects.filter(id=contract_id).update(
-            #     status=3)
+            Contract.objects.filter(id=contract_id).update(
+                status=3)
 
             self.stdout.write(self.style.SUCCESS("Processamento Finalizado!"))
         except DatabaseError:
