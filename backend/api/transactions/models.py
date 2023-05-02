@@ -1,9 +1,8 @@
 from django.db import models
 from core.models import User
-from django.urls import reverse
 from core.utils.file_path import upload_documentos
-from core.utils.balance_formater import balance_formater
 from django.core.validators import FileExtensionValidator
+from datetime import datetime
 
 
 class Contract(models.Model):
@@ -139,9 +138,15 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = ("Transaction")
         verbose_name_plural = ("Transactions")
+        ordering = ['type']
 
     def __str__(self):
         return f'{self.type} - {self.date} - {self.product} - {self.price} - {self.seller}'
+
+    def date_formarter(self):
+        data_iso = datetime.fromisoformat(self.date)
+        data_formatada = data_iso.strftime("%Y-%m-%dT%H:%M:%SGMT%z")
+        return data_formatada
 
 
 class Report(models.Model):

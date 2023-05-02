@@ -5,6 +5,7 @@ const initialState = {
   upload: [],
   contracts: [],
   transactions: [],
+  reports: "",
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -50,14 +51,10 @@ export const contractTransactions = createAsyncThunk(
       contract_id,
       token
     );
-    if (!data.data.error) {
-      console.log("IF");
-      console.log(data);
-      return thunkAPI.fulfillWithValue(data.data.transactio_contract);
+    
+    if (!data.data.error) {      
+      return thunkAPI.fulfillWithValue(data.data);
     } else {
-      console.log("ELSE");
-      console.log(data);
-
       const message = data.data.error;
       return thunkAPI.rejectWithValue(message);
     }
@@ -113,7 +110,10 @@ export const contractsSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.message = action.payload;
-        state.transactions = action.payload;
+        state.transactions = action.payload.transactio_contract;
+        state.reports = JSON.parse(action.payload.report.report_data);
+        console.log(state.reports);
+  
       })
       .addCase(contractTransactions.rejected, (state, action) => {
         state.isLoading = false;

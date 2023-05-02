@@ -12,8 +12,6 @@ import json
 class Command(BaseCommand):
     help = 'Call the process data function to extract data from txt and save on DB'
 
-    # CRIAR CLASSE ENUM PARA MELHORAR OS PARAMETROS CONSTANTES
-
     def create_producer_and_affiliate(self, id_seller: int, seller_name: str) -> None:
         """
 
@@ -32,8 +30,6 @@ class Command(BaseCommand):
         # contract_ID
         parser.add_argument('id', type=int, help='Id do Contrato')
 
-
-    
     @transaction_atomic.atomic
     def handle(self, *args, **kwargs):
         # Recupera os dados passados pelo get_bd_data
@@ -78,7 +74,7 @@ class Command(BaseCommand):
 
                 if product not in affiliate:
                     affiliate[product] = {
-                        'affiliate': person, 'recivied': 0, 'sell': 0}
+                        'affiliate': person, 'received': 0, 'sell': 0}
 
                 if type_id == 1:
                     if product not in sales[person]:
@@ -92,7 +88,7 @@ class Command(BaseCommand):
                         affiliate[product]['sell'] += price
 
                 elif type_id == 4:
-                    affiliate[product]['recivied'] += price
+                    affiliate[product]['received'] += price
                 """
                     Após fazer os tratamentos necessários, para cada linha
                     do Txt cria uma instância do Objeto `Transaction` que é 
@@ -113,25 +109,24 @@ class Command(BaseCommand):
 
             for person, product in sales.items():
                 for product_name, struct in product.items():
-                    total_sell_affiliate = 0
-                    total_comission_payed = 0
+                    sold_by_affiliate = 0
+                    total_commission_paid = 0
                     if product_name in affiliate:
-                        total_sell_affiliate = affiliate[product_name]['sell']
-                        total_comission_payed = affiliate[product_name]['recivied']
+                        sold_by_affiliate = affiliate[product_name]['sell']
+                        total_commission_paid = affiliate[product_name]['received']
 
-                    total_bruto = struct['price'] + total_sell_affiliate
+                    gross_total = struct['price'] + sold_by_affiliate
                     result = {
-                        'total_sell_affiliate': total_sell_affiliate,
-                        'total_comission_payed': total_comission_payed,
-                        'total': total_bruto,
-                        'liquido': total_bruto - total_comission_payed,
+                        'person': person,
                         'product': product_name,
-                        'total_sell_productor': struct['price'],
-                        'peson': person,
+                        'total_sold_by_producer': struct['price'],
+                        'total_sold_by_affiliate': sold_by_affiliate,
+                        'total_commission_paid': total_commission_paid,
+                        'gross_total': gross_total,
+                        'liquid': gross_total - total_commission_paid,
 
                     }
                     report_total.append(result)
-
             data_json = json.dumps(report_total)
 
         try:

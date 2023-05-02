@@ -2,9 +2,7 @@ from transactions.models import Transaction, TransactionType
 from datetime import datetime
 
 
-def date_formarter(data):
-    data_iso = datetime.fromisoformat(data)
-    data_formatada = data_iso.strftime("%Y-%m-%dT%H:%M:%SGMT%z")
+
 
     return str(data_formatada)
 

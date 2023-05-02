@@ -36,7 +36,7 @@ class Command(BaseCommand):
                 call_command('call_data_processor', data.upload.path,
                              int(data.id), force_color=False)
                 # Quando iniciar o Processamento, atualiza status para 2
-                pending.update(status=2)
+                # pending.update(status=2)
                 # Retorna a Mensagem de sucesso no console.
                 self.stdout.write(self.style.SUCCESS(
                     f"O Contrato: {data.id} foi Processado!"))
