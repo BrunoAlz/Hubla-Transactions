@@ -8,6 +8,37 @@ import json
 class Command(BaseCommand):
     help = 'Call the process data function to extract data from txt and save on DB'
 
+    """
+        Django management command to extract data from the txt file,
+        treat and send it to the bank, as well as generate a
+        small report from the extracted data
+
+
+        Methods:
+        `add_arguments(self, parser):`
+            This method is responsible for defining the arguments that the
+            command will accept.
+            
+            It receives a parser object as a parameter,
+            which must be used to add arguments using the add_argument method.
+            In this case, the command takes two mandatory arguments: file and id.
+            What are the data generated after uploading a file.
+
+        `def handle(self, *args, **kwargs):`
+            This method is responsible for executing the main `logic of the
+            command`.
+            
+            It is called when the command is executed and receives
+            the arguments defined in the add_arguments method as a kwargs dictionary.
+            The main logic of the command is to process a text file and save
+            the extracted data in the database.
+
+            The method uses the `transaction_atomic.atomic decorator` to ensure
+            that all database operations are performed within a single atomic
+            transaction, i.e. if an error occurs in any of the database operations,
+            all operations are rolled back.
+    """
+
     def add_arguments(self, parser):
         parser.add_argument('file', type=str, help='Caminho do Arquivo')
         parser.add_argument('id', type=int, help='Id do Contrato')
@@ -21,12 +52,12 @@ class Command(BaseCommand):
         sales = {}
         affiliate = {}
 
+        """
+            TXT data extraction
+        """
         with open(file, 'r') as file:
             self.stdout.write(self.style.WARNING(
                 "Processamento Iniciado..."))
-            # TODO, fazer validações nesses dados, caso a linha venha quebrada ou algo do tipo
-            # continuar o processamento e notificar sobre o problema.
-            # Começa a percorrer o arquivo txt.
 
             for line in file:
                 type_id = int(line[0])

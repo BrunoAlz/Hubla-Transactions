@@ -7,9 +7,8 @@ class Command(BaseCommand):
     """
         Django management command that verify pending contract.
 
-        `handle` checks the database for contracts
-         pending, if it exists, search for contracts and send them to the
-         function of processing.
+        `handle` checks the database for pending contracts uploaded by the user,
+        if it exists, search for contracts and send them to the function of processing.
     """
 
     def handle(self, *args, **kwargs):
