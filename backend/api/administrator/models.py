@@ -6,8 +6,8 @@ from django.db import models
 class User(AbstractUser):
 
     """
-        Cria o model de usuários, que será a tabela no banco de dados
-        reponsável por armazenar os dados dos usuários do sistema
+        Creates the user model, which will be the table in the database
+        responsible for storing the data of users
     """
 
     first_name = models.CharField(max_length=255)
