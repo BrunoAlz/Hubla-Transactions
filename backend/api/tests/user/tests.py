@@ -137,14 +137,14 @@ API_LOGIN_URL = "/api/users/login/"
 class LoginUserAPIViewTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            email="HublaTransactions@test.com",
+            email="HublaTransactions@hubla.com",
             password="hublapassword"
         )
 
     def test_login_user_with_valid_credentials(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'HublaTransactions@test.com',
+            'email': 'HublaTransactions@hubla.com',
             'password': 'hublapassword'
         }
         response = self.client.post(url, data, format='json')
@@ -154,8 +154,8 @@ class LoginUserAPIViewTest(APITestCase):
     def test_login_user_with_invalid_credentials(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'test_user_email@test.com',
-            'password': 'invalidpassword'
+            'email': 'HublaTransactions.hubla.com',
+            'password': 'invalidhublapassword'
         }
         response = self.client.post(url, data, format='json')
         print(response.data)
@@ -163,10 +163,22 @@ class LoginUserAPIViewTest(APITestCase):
         self.assertEqual(response.data['error'],
                          'Please check your credentials!')
 
-    def test_login_user_with_missing_fields(self):
+    def test_login_user_with_missing_email(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'test_user_email@test.com'
+            'password': 'invalidhublapassword'
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error'],
+                         'Please check your credentials!')
+
+    def test_login_user_with_missing_password(self):
+        url = API_LOGIN_URL
+        data = {
+            'email': 'HublaTransactions@hubla.com'
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['error'],
+                         'Please check your credentials!')
