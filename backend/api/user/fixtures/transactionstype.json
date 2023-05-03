@@ -38,5 +38,25 @@
             "nature": "Entrada",
             "signal": "+"
         }
+    },
+    {
+        "model": "transactions.transactiontype",
+        "pk": 5,
+        "fields": {
+            "type": 5,
+            "description": "NOT_A_NUMBER",
+            "nature": "ERROR",
+            "signal": "X"
+        }
+    },
+    {
+        "model": "transactions.transactiontype",
+        "pk": 6,
+        "fields": {
+            "type": 6,
+            "description": "NON-EXISTENT-TYPE",
+            "nature": "ERROR",
+            "signal": "X"
+        }
     }
 ]
