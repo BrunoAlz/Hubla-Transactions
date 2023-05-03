@@ -117,7 +117,7 @@ const Login = () => {
                   </div>
                 </form>
                 <span>
-                  Não é cadastrado? <Link to="/register">Sing Up</Link>
+                  Not registered? <Link to="/register">Sing Up</Link>
                 </span>
               </div>
             </div>

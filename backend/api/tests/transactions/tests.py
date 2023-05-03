@@ -14,7 +14,7 @@ from django.test import TestCase
 from django.db import DataError, IntegrityError
 
 
-class TesteContractModel(TestCase):
+class ContractModelTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             email=TEST_EMAIL,
@@ -38,11 +38,7 @@ class TesteContractModel(TestCase):
         self.assertTrue(Contract.objects.create(creator=self.user))
 
 
-class TestTransactionTypeModel(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            email=TEST_EMAIL,
-            password=TEST_PASSW)
+class TransactionTypeModelTestCase(TestCase):
 
     def test_transaction_type_creation(self):
         type = TransactionType.objects.create(
@@ -65,7 +61,7 @@ class TestTransactionTypeModel(TestCase):
             type.full_clean()
 
 
-class TestTransactionModelTestCase(TestCase):
+class TransactionModelTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             email=TEST_EMAIL,
@@ -128,7 +124,7 @@ class TestTransactionModelTestCase(TestCase):
             )
 
 
-class ContractCreateListViewTestCase(APITestCase):
+class ContractCreateListAPITestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -182,22 +178,30 @@ class ContractCreateListViewTestCase(APITestCase):
 
     def test_contract_list_unauthenticated_user(self):
         self.client.force_authenticate(user=None)
+
         response = self.client.get(f"{API_CONTRACTS_URL}list/")
+
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class ContractTransactionsDetailsViewTestCase(APITestCase):
+class ContractTransactionsDetailsAPITestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+
         self.user_token = User.objects.create_user(
             email=TEST_EMAIL, password=TEST_PASSW)
+
         self.token = JWTAuthentucation.generate_jwt(self.user_token.id)
+
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+
         self.contract = Contract.objects.create(
             creator=self.user_token, upload='file1.txt', status='1')
+
         type = self.type = TransactionType.objects.create(
             type=1, description="teste", nature="Entry", signal="+")
+
         self.transactions = Transaction.objects.create(
             type=type,
             contract=self.contract,
@@ -210,12 +214,17 @@ class ContractTransactionsDetailsViewTestCase(APITestCase):
     def tests_the_listing_of_transactions_by_the_authenticated_user(self):
         response = self.client.get(
             f"{API_CONTRACTS_URL}{self.contract.pk}", follow=True)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         transactions = response.data['transactio_contract']
+
         self.assertNotEqual(len(transactions), 0)
+
         self.assertEqual(transactions[0]['contract'], self.contract.id)
 
     def test_unauthorized_user_cannot_view_contract_details(self):
         response = self.client.get(
             f"{API_CONTRACTS_URL}{self.contract.pk}", follow=True)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)

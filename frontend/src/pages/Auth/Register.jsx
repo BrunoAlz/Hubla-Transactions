@@ -151,7 +151,7 @@ const Register = () => {
                   </div>
                 </form>
                 <span>
-                  Já possui cadastro ?<Link to="/login"> Entrar!</Link>
+                  Already have registration? <Link to="/login"> Sing in!</Link>
                 </span>
               </div>
             </div>
