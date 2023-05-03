@@ -17,13 +17,13 @@ Para instalar o projeto e preparar seu ambiente, execute os comandos abaixo:
 ## Banco de dados
 O banco de dados precisa ser criado ser manualmente:
 
-1. Criar o banco compatível com as configurações do .env
+1. Criar o banco compatível com as configurações do .env.
 2. Após a criação do banco Utilize o comando `python manage.py migrate` para gerar as migrações.
 5. Suba o servidor usando o comando `python manage.py runserver`.
 
 ## Instalação Frontend
 1. No diretório /frontend use o comando `npm install` para instalar as dependências.
-2. Após a instalação utilize o comando `npm run dev` para subir o servidor de do cliente.
+2. Após a instalação utilize o comando `npm run dev` para subir o servidor do cliente.
 
 ## Responsabilidades
 Em sua raíz, o projeto contém uma separação básica entre frontend e backend.
@@ -55,7 +55,7 @@ Foi tomada em conta essa abordagem, sendo os arquivos responsáveis:
 
 A fim de separar as responsabilidades, foram criados dois comandos, sendo: `call_data_processor` e `get_bd_data`. 
 
-Para utilizar os comandos é necessário estar no mesmo nível hierarquico do arquivo `manage.py`. 
+Para utilizar os comandos é necessário estar no mesmo nível hierárquico do arquivo `manage.py`. 
 
 Para processar os dados basta utilizar o comando `python manage.py get_bd_data`.
 
@@ -73,10 +73,9 @@ Para processar os dados basta utilizar o comando `python manage.py get_bd_data`.
 > Ambos comandos, segundo a própria documentação do framework , podem ser executados por exemplo a partir do terminal, ou seja, podem existir diferentes tipos de gatilhos para que isso ocorra (ex: cron ou alguma tarefa agendada).
 
 ### Testes unitários
-Para realizar os testes unitários, é necessário entrar na pasta backend, no mesmo nível hierarquico do arquivo `manage.py`. 
+Para realizar os testes unitários, é necessário entrar na pasta backend, no mesmo nível hierárquico do arquivo `manage.py`
 e rodar o comando `pytest` para resultados simples e `pytest --cov` para o coverage.
 ```
-
 api\tests\constants.py               16      0   100%
 api\tests\transactions\tests.py     100      3    97%   157-159
 api\tests\user\tests.py              90      0   100%
@@ -87,7 +86,6 @@ api\user\authentication.py           30      6    80%   44-47, 52-53
 api\user\models.py                   53     18    66%   19-20, 26, 29, 35, 50-63, 96, 99    
 api\user\serializers.py              31      1    97%   46
 api\user\views.py                    25      0   100%
-
 ```
 
 ### Exemplo de como executar o comando para processar os contratos pendentes:
@@ -133,3 +131,7 @@ seller = validate_seller(line[66:86])
 ```
 -  Para cada campo, existe uma validação em específica, e suas regras, estão contidas em:
 https://github.com/BrunoAlz/Hubla-Transactions/blob/master/backend/api/core/management/commands/data_validate.py
+
+
+- Documentação dos ENDPOINTS do backend utilizando Postman.
+https://github.com/BrunoAlz/Hubla-Transactions/blob/master/Transactions%20API.postman_collection.json
