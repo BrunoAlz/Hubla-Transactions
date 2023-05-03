@@ -3,6 +3,10 @@ from transactions.models import Contract
 from transactions.models import TransactionType, Transaction, Report
 from django.db import DatabaseError, transaction as transaction_atomic
 import json
+from django.core.cache import cache
+from .data_validate import (validate_date_format, validate_price,
+                            validate_product, validate_seller,
+                            validate_type_id)
 
 
 class Command(BaseCommand):
@@ -15,6 +19,12 @@ class Command(BaseCommand):
 
 
         Methods:
+        `get_cached_type(self, extracted_id):`
+            Checks if the requested type is already cached. If not, it
+            retrieves the TransactionType object from the database and
+            stores it in the cached_types dictionary, to prevent the
+            database from being requested several times during data extraction.
+
         `add_arguments(self, parser):`
             This method is responsible for defining the arguments that the
             command will accept.
@@ -39,6 +49,18 @@ class Command(BaseCommand):
             all operations are rolled back.
     """
 
+    def get_cached_type(self, extracted_id):
+        cached_types = cache.get('transaction_types')
+        if cached_types is None:
+            cached_types = {}
+
+        if extracted_id not in cached_types:
+            transaction_type = TransactionType.objects.get(type=extracted_id)
+            cached_types[extracted_id] = transaction_type
+            cache.set('transaction_types', cached_types)
+
+        return cached_types[extracted_id]
+
     def add_arguments(self, parser):
         parser.add_argument('file', type=str, help='Caminho do Arquivo')
         parser.add_argument('id', type=int, help='Id do Contrato')
@@ -61,12 +83,12 @@ class Command(BaseCommand):
                 "Processamento Iniciado..."))
 
             for line in file:
-                type_id = int(line[0])
-                type = TransactionType.objects.get(type=type_id)
-                date = line[1:26].replace(" ", "")
-                product = line[26:56].strip()
-                price = int(line[56:66])
-                seller = line[66:86].strip()
+                type_id = validate_type_id(line[0])
+                type = self.get_cached_type(type_id)
+                date = validate_date_format(line[1:26])
+                product = validate_product(line[26:56])
+                price = validate_price(line[56:66])
+                seller = validate_seller(line[66:86])
 
                 person = seller.replace(" ", "_")
                 product_key = product.replace(" ", "_").replace("-", "_")
@@ -134,7 +156,7 @@ class Command(BaseCommand):
 
                     report_total.append(result)
             data_json = json.dumps(report_total)
-        print(data_json)
+
         try:
             Report.objects.update_or_create(
                 contract_id=contract_id,
