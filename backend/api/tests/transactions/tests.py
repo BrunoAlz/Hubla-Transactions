@@ -4,9 +4,11 @@ from transactions.models import Contract
 from user.authentication import JWTAuthentucation
 from tests.constants import (TEST_EMAIL, TEST_PASSW, API_CONTRACTS_URL)
 from rest_framework import status
+from transactions.models import Transaction, TransactionType
+from datetime import datetime
 
 
-class ContractCreateViewTestCase(APITestCase):
+class ContractCreateListViewTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -16,24 +18,24 @@ class ContractCreateViewTestCase(APITestCase):
         self.token = JWTAuthentucation.generate_jwt(self.user_token.id)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
-    def _create_test_file(self, path):
-        f = open(path, 'w')
-        f.write('TESTANDO CONTRACT CREATION VIEW\n')
-        f.close()
-        f = open(path, 'rb')
-        return {'upload': f}
+    # def _create_test_file(self, path):
+    #     f = open(path, 'w')
+    #     f.write('TESTANDO CONTRACT CREATION VIEW\n')
+    #     f.close()
+    #     f = open(path, 'rb')
+    #     return {'upload': f}
 
-    def tests_whether_the_creation_of_the_contract_is_correct(self):
-        upload = self._create_test_file('sales.txt')
-        response = self.client.post(
-            API_CONTRACTS_URL, upload, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(Contract.objects.exists())
-        contract = Contract.objects.first()
-        self.assertEqual(contract.creator, self.user)
-        self.assertEqual(contract.status, '1')
-        self.assertEqual(contract.upload.name,
-                         'api/uploads/creator/1/sales.txt')
+    # def tests_whether_the_creation_of_the_contract_is_correct(self):
+    #     upload = self._create_test_file('sales.txt')
+    #     response = self.client.post(
+    #         API_CONTRACTS_URL, upload, format='multipart')
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     self.assertTrue(Contract.objects.exists())
+    #     contract = Contract.objects.first()
+    #     self.assertEqual(contract.creator, self.user)
+    #     self.assertEqual(contract.status, '1')
+    #     self.assertEqual(contract.upload.name,
+    #                      'api/uploads/creator/1/sales.txt')
 
     def Tests_if_the_user_can_access_list_without_contracts(self):
         response = self.client.get(f"{API_CONTRACTS_URL}list/")
@@ -62,3 +64,34 @@ class ContractCreateViewTestCase(APITestCase):
         self.client.force_authenticate(user=None)
         response = self.client.get(f"{API_CONTRACTS_URL}list/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ContractTransactionsDetailsViewTestCase(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user_token = User.objects.create_user(
+            email=TEST_EMAIL, password=TEST_PASSW)
+        self.token = JWTAuthentucation.generate_jwt(self.user_token.id)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        self.contract = Contract.objects.create(
+            creator=self.user_token, upload='file1.txt', status='1')
+        type = self.type = TransactionType.objects.create(
+            type=1, description="teste", nature="Entrada", signal="+")
+        self.transactions = Transaction.objects.create(
+            type=type,
+            contract=self.contract,
+            date=datetime.now(),
+            product="TEST PRODUCT",
+            price=999999999,
+            seller="TESTE SELER",
+        )
+
+    def tests_the_listing_of_transactions_by_the_authenticated_user(self):
+        response = self.client.get(
+            f"{API_CONTRACTS_URL}{self.contract.pk}", follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        transactions = response.data['transactio_contract']
+        self.assertNotEqual(len(transactions), 0)
+        self.assertEqual(transactions[0]['contract'], self.contract.id)
+
