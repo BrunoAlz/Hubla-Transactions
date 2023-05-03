@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 // ROUTERS
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // REDUCERS
 import { register, reset } from "../../slices/auth/authSlice";
 import { toast } from "react-toastify";
@@ -34,7 +34,11 @@ const Register = () => {
     }
     if (isSuccess) {
       navigate("/login");
+<<<<<<< HEAD
       toast.success("Registered, Now just Login!!");
+=======
+      toast.success("Registered successfully");
+>>>>>>> bb17476665970142b806cd325cce9956ae01ea9e
     }
 
     dispatch(reset());
@@ -158,7 +162,11 @@ const Register = () => {
                           className="spinner-border spinner-border-sm mx-2"
                           role="status"
                         ></span>
+<<<<<<< HEAD
                         Processing..
+=======
+                        Creating..
+>>>>>>> bb17476665970142b806cd325cce9956ae01ea9e
                       </button>
                     )}
                   </div>

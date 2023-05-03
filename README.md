@@ -11,15 +11,17 @@
 Para instalar o projeto e preparar seu ambiente, execute os comandos abaixo:
 
 1. Dentro da pasta /backend use o comando `python -m venv venv` para criar o ambiente virtual.
-2. Depois utilize o comando `pip install -r requirements.txt` para instalar as depedências no ambiente.
-3. Utilize o comando `python env_gen.py` para gerar o .env.
+2. Ative o ambiente virtual com o comando `venv/Scripts/Activate` no Windows ou `venv/bin/activate` no Mac e Linux.
+3. Depois utilize o comando `pip install -r requirements.txt` para instalar as depedências no ambiente.
+4. Utilize o comando `python env_gen.py` para gerar o .env.
 
 ## Banco de dados
-O banco de dados precisa ser criado ser manualmente:
+O banco de dados precisa ser criado ser manualmente com Agrupamento (Collation) `utf8mb3_general_ci`:
 
 1. Criar o banco compatível com as configurações do .env.
 2. Após a criação do banco Utilize o comando `python manage.py migrate` para gerar as migrações.
-5. Suba o servidor usando o comando `python manage.py runserver`.
+3. Após rodar as migrações use o comando `python manage.py loaddata transactionstype.json` para carregar as fixtures no banco.
+4. Suba o servidor usando o comando `python manage.py runserver`.
 
 ## Instalação Frontend
 1. No diretório /frontend use o comando `npm install` para instalar as dependências.

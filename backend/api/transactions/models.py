@@ -55,11 +55,13 @@ class TransactionType(models.Model):
     NATURE = (
         ("Entrada", "Entrada"),
         ("Saida", "Saída"),
+        ("ERROR", "ERROR"),
     )
 
     SIGNAL = (
         ("+", "+"),
         ("-", "-"),
+        ("X", "X"),
     )
 
     type = models.SmallIntegerField(
