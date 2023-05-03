@@ -4,29 +4,33 @@ from django.test import TestCase
 from user.models import User
 from rest_framework.test import APITestCase
 
+from tests.constants import (TEST_EMAIL, TEST_FIRST_NAME, TEST_LAST_NAME,
+                             TEST_PASSW, API_REGISTER_URL, API_LOGIN_URL,
+                             TEST_EMAIL2)
+
 
 class TestUserModel(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            email="test_user_email@test.com",
-            password="hublapassword"
+            email=TEST_EMAIL,
+            password=TEST_PASSW
         )
 
     def test_if_user_was_created_with_complete_credentials(self):
         self.assertTrue(User.objects.filter(
-            email='test_user_email@test.com').exists())
+            email=TEST_EMAIL).exists())
 
     def test_if_user_can_be_created_without_email(self):
         self.assertTrue(User.objects.create(
-            email="", password="hublapassword"))
+            email="", password=TEST_PASSW))
 
     def test_if_user_can_be_created_without_password(self):
         self.assertTrue(User.objects.create(
-            email="test_user_email2@test.com", password=""))
+            email=TEST_EMAIL2, password=""))
 
     def tests_if_user_can_be_created_with_invalid_email(self):
         self.assertTrue(User.objects.create(
-            email="test_user.com", password='hublapassword'))
+            email="test_user.com", password=TEST_PASSW))
 
     def tests_if_user_can_be_created_with_1_character_password(self):
         self.assertTrue(User.objects.create(
@@ -34,11 +38,11 @@ class TestUserModel(TestCase):
 
     def tests_if_it_is_possible_to_update_the_users_first_name(self):
         self.assertTrue(User.objects.filter(
-            email='test_user_email@test.com').update(first_name='hubla'))
+            email=TEST_EMAIL).update(first_name=TEST_FIRST_NAME))
 
     def tests_if_it_is_possible_to_update_the_users_last_name(self):
         self.assertTrue(User.objects.filter(
-            email='test_user_email@test.com').update(last_name='hubla'))
+            email=TEST_EMAIL).update(last_name=TEST_FIRST_NAME))
 
     def test_if_user_is_staff(self):
         self.assertFalse(self.user.is_staff)
@@ -47,11 +51,8 @@ class TestUserModel(TestCase):
         self.assertFalse(self.user.is_superuser)
 
     def test_if_user_can_authenticate_with_correct_credentials(self):
-        user = User.objects.get(email='test_user_email@test.com')
-        self.assertTrue(user.check_password('hublapassword'))
-
-
-API_REGISTER_URL = "/api/users/register/"
+        user = User.objects.get(email=TEST_EMAIL)
+        self.assertTrue(user.check_password(TEST_PASSW))
 
 
 class RegisterUserViewTest(APITestCase):
@@ -60,11 +61,11 @@ class RegisterUserViewTest(APITestCase):
 
     def test_register_user_with_valid_data(self):
         data = {
-            "first_name": "Hubla",
-            "last_name": "Transactions",
-            "email": "HublaTransactions@gmail.com",
-            "password": "Hubla123@",
-            "password_confirm": "Hubla123@"
+            "first_name": TEST_FIRST_NAME,
+            "last_name": TEST_LAST_NAME,
+            "email": TEST_EMAIL,
+            "password": TEST_PASSW,
+            "password_confirm": TEST_PASSW
         }
         response = self.client.post(API_REGISTER_URL, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -73,7 +74,7 @@ class RegisterUserViewTest(APITestCase):
     def test_register_user_with_invalid_data(self):
 
         data = {
-            "first_name": "Hubla",
+            "first_name": TEST_FIRST_NAME,
             "last_name": "1nvalid N4me",
             "email": "invalid-email",
             "password": "1"
@@ -86,9 +87,9 @@ class RegisterUserViewTest(APITestCase):
 
         data = {
             "first_name": "d21d12d1d12d1xxx 2 1@ ffw",
-            "last_name": "transactions",
-            "email": "Hublatransactions@hubla.com",
-            "password": "hublapassword"
+            "last_name": TEST_LAST_NAME,
+            "email": TEST_EMAIL,
+            "password": TEST_PASSW
         }
         response = self.client.post(API_REGISTER_URL, data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -97,10 +98,10 @@ class RegisterUserViewTest(APITestCase):
     def test_register_user_with_invalid_last_name(self):
 
         data = {
-            "first_name": "Hubla",
+            "first_name": TEST_FIRST_NAME,
             "last_name": "ASDASD21d 112 d1@ dsa",
-            "email": "Hublatransactions@hubla.com",
-            "password": "hublapassword"
+            "email": TEST_EMAIL,
+            "password": TEST_PASSW
         }
         response = self.client.post(API_REGISTER_URL, data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -109,9 +110,9 @@ class RegisterUserViewTest(APITestCase):
     def test_register_user_without_password(self):
 
         data = {
-            "first_name": "Hubla",
-            "last_name": "transactions",
-            "email": "Hublatransactions@hubla.com",
+            "first_name": TEST_FIRST_NAME,
+            "last_name": TEST_LAST_NAME,
+            "email": TEST_EMAIL,
             "password": ""
         }
         response = self.client.post(API_REGISTER_URL, data=data)
@@ -121,9 +122,9 @@ class RegisterUserViewTest(APITestCase):
     def test_register_user_with_short_numeric_password(self):
 
         data = {
-            "first_name": "Hubla",
-            "last_name": "transactions",
-            "email": "Hublatransactions@hubla.com",
+            "first_name": TEST_FIRST_NAME,
+            "last_name": TEST_LAST_NAME,
+            "email": TEST_EMAIL,
             "password": "13"
         }
         response = self.client.post(API_REGISTER_URL, data=data)
@@ -131,21 +132,18 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(User.objects.count(), 0)
 
 
-API_LOGIN_URL = "/api/users/login/"
-
-
 class LoginUserAPIViewTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            email="HublaTransactions@hubla.com",
-            password="hublapassword"
+            email=TEST_EMAIL,
+            password=TEST_PASSW
         )
 
     def test_login_user_with_valid_credentials(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'HublaTransactions@hubla.com',
-            'password': 'hublapassword'
+            'email': TEST_EMAIL,
+            'password': TEST_PASSW
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -154,7 +152,7 @@ class LoginUserAPIViewTest(APITestCase):
     def test_login_user_with_invalid_credentials(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'HublaTransactions.hubla.com',
+            'email': TEST_EMAIL,
             'password': 'invalidhublapassword'
         }
         response = self.client.post(url, data, format='json')
@@ -176,7 +174,7 @@ class LoginUserAPIViewTest(APITestCase):
     def test_login_user_with_missing_password(self):
         url = API_LOGIN_URL
         data = {
-            'email': 'HublaTransactions@hubla.com'
+            'email': TEST_EMAIL
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
