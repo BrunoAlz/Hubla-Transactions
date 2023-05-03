@@ -4,9 +4,9 @@ import re
 TYPE_ID_IS_NOT_A_NUMBER = 5
 TYPE_ID_IS_NOT_ALLOWED = 6
 INVALID_DATE_FORMAT = "1992-08-07T00:00:00Z"
-INVALID_PRODUCT_NAME_FORMAT = "VERIFICAR NOME DO PRODUTO"
+INVALID_PRODUCT_NAME_FORMAT = "CHECK PRODUCT NAME"
 INVALID_PRICE_FORMAT = 999999999
-INVALID_SELLER_NAME_FORMAT = "VERIFICAR NOME"
+INVALID_SELLER_NAME_FORMAT = "VERIFY NAME"
 
 VALIDATE_PRODUCT_NAME = r'^[A-Za-z -]+$'
 VALIDATE_SELLER_NAME = r'^[a-zA-Z\s]+$'
@@ -24,7 +24,6 @@ def validate_type_id(type_id):
     """
     try:
         number = int(type_id)
-        print(number)
         if number >= 1 and number <= 4:
             return number
         return TYPE_ID_IS_NOT_ALLOWED
@@ -54,7 +53,6 @@ def validate_product(product):
         otherwise it will return a pattern used as a reference for errors
     """
     item = product.strip()
-    print(item)
     if bool(re.match(VALIDATE_PRODUCT_NAME, item)):
         return item
     return INVALID_PRODUCT_NAME_FORMAT
@@ -80,7 +78,6 @@ def validate_seller(seller):
         otherwise it will return a pattern used as a reference for errors
     """
     name = seller.strip()
-    print(name)
     if bool(re.match(VALIDATE_SELLER_NAME, name)):
         return name
     return INVALID_SELLER_NAME_FORMAT

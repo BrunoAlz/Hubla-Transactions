@@ -29,6 +29,15 @@ class Command(BaseCommand):
             This method is responsible for defining the arguments that the
             command will accept.
             
+            It starts extracting and validating the data, then starts assembling
+            the report in json to store the report data, and thus prevent several
+            queries with a large number of joins, aggregations and calculations
+            from being made in the database to display this data.
+
+            The report is a mirror of the data at the time of processing the file,
+            as well as the transactions at the time it will not be possible to change
+            without a new upload.
+
             It receives a parser object as a parameter,
             which must be used to add arguments using the add_argument method.
             In this case, the command takes two mandatory arguments: file and id.
@@ -50,6 +59,14 @@ class Command(BaseCommand):
     """
 
     def get_cached_type(self, extracted_id):
+        """
+            `Method to cache the instance of TransactionType`,
+            reducing the number of queries performed in the database.
+            Without the cache the number of queries will be the number of lines of the
+            file, while with the cached query it will only be 4, which are
+            the existing types in the bank currently.
+        """
+
         cached_types = cache.get('transaction_types')
         if cached_types is None:
             cached_types = {}
@@ -75,9 +92,6 @@ class Command(BaseCommand):
         affiliate = {}
         affiliate_final_balance = {}
 
-        """
-            TXT data extraction
-        """
         with open(file, 'r') as file:
             self.stdout.write(self.style.WARNING(
                 "Processamento Iniciado..."))
