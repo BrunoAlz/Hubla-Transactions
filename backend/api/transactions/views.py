@@ -4,7 +4,6 @@ from .serializers import (ContractRegisterSerializer,
                           ContractListSerializer, ContractDetailSerializer)
 from user.authentication import JWTAuthentucation
 from rest_framework import permissions
-from rest_framework import exceptions
 from .models import Contract
 from rest_framework import serializers
 
@@ -14,31 +13,50 @@ from rest_framework import serializers
 
 class ContractRegisterView(APIView):
     """
-    Esta view permite a criação de usuários no sistema.
+    A view for registering a contract.
+
+    `Attributes`:
+        authentication_classes (list): A list of authentication classes 
+        used for this view.
+        permission_classes (list): A list of permission classes used for 
+        this view.
+
+
+    `Returns`:
+        A Response object containing a success message if the contract 
+        was created successfully,
+        or an error message if the request data is invalid.
+
     """
     authentication_classes = [JWTAuthentucation]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        # validando os dados do registro
+
         serializer = ContractRegisterSerializer(
             data=request.data, context={'user': request.user})
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({'success': 'Contrato registrado com sucesso.'})
+            return Response({'success': 'Successfully registered contract'})
 
         except serializers.ValidationError as e:
             return Response({'error': e.detail})
 
 
 class ContractListView(APIView):
+    """
+    This view shows contracts created by the user,
+    each user can only see their own data.
 
+    `Returns:`
+            A Response object containing a list of serialized
+            Contract objects created by the authenticated user.
+    """
     authentication_classes = [JWTAuthentucation]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-
         user = request.user.id
         contracts = Contract.objects.filter(creator_id=user)
         serializer = ContractListSerializer(contracts, many=True)
@@ -47,7 +65,20 @@ class ContractListView(APIView):
 
 class ContractDetailAPIView(APIView):
     """
-    Retrieve, update or delete a snippet instance.
+    This view will search for transactions related to the contract
+    created by the user. After uploading the contract, the system
+    will wait for the file to be processed asynchronously, as soon
+    as it is processed, it will be possible to view all transactions
+    related to the contract.
+
+
+    `Args:`
+        pk (int): The primary key of the contract
+
+    `Returns:`
+    A Response object containing a serialized ContractDetail
+    object `if the contract exists and belongs to
+    the authenticated user`, or an error message.
     """
     authentication_classes = [JWTAuthentucation]
 
