@@ -158,11 +158,7 @@ const Register = () => {
                           className="spinner-border spinner-border-sm mx-2"
                           role="status"
                         ></span>
-<<<<<<< HEAD
                         Processing..
-=======
-                        Creating..
->>>>>>> bb17476665970142b806cd325cce9956ae01ea9e
                       </button>
                     )}
                   </div>
