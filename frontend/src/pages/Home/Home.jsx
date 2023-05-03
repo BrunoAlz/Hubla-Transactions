@@ -1,5 +1,5 @@
 import Layout from "../Layout";
-import { fileUpload, reset } from "../../slices/contracts/contractsSlice";
+import { fileUpload} from "../../slices/contracts/contractsSlice";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +59,6 @@ const Home = () => {
                 </div>
               </form>
             </div>
-            {isLoading && "ENVIADAZZZZZZZZZZZZZZZZZZZZZZZZZZZZZO!"}
             <div className="container mt-5">
               <div className="row gx-lg-5 align-items-center">
                 <div className="col-lg-6 mb-5 mb-lg-0">
@@ -80,6 +79,9 @@ const Home = () => {
                 </div>
               </div>
             </div>
+            {isLoading && (
+              <h3 className="text-center text-primary">Sending..</h3>
+            )}
           </main>
         </div>
       </div>

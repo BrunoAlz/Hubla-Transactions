@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 // ROUTERS
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // REDUCERS
 import { register, reset } from "../../slices/auth/authSlice";
 import { toast } from "react-toastify";
@@ -34,7 +34,7 @@ const Register = () => {
     }
     if (isSuccess) {
       navigate("/login");
-      toast.success("Cadastrado!");
+      toast.success("Registered successfully");
     }
 
     dispatch(reset());
@@ -44,7 +44,7 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password_confirm) {
-      toast.error("As senhas devem ser iguais");
+      toast.error("Passwords must be the same");
     } else {
       const userData = {
         first_name,
@@ -141,13 +141,26 @@ const Register = () => {
                   </div>
 
                   <div className="row">
-                    {isLoading && "CARREGANDO"}
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-block shadow mb-4"
-                    >
-                      <span className="fs-5">Sign up</span>
-                    </button>
+                    {!isLoading ? (
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block mb-4 shadow"
+                      >
+                        <span className="fs-5">Sign up</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-secondary btn-block mb-4 shadow fs-5"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm mx-2"
+                          role="status"
+                        ></span>
+                        Creating..
+                      </button>
+                    )}
                   </div>
                 </form>
                 <span>
