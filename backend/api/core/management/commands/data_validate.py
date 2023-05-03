@@ -2,7 +2,7 @@ from datetime import datetime
 import re
 
 TYPE_ID_IS_NOT_A_NUMBER = 5
-TYPE_ID_IS_ALLOWED = 6
+TYPE_ID_IS_NOT_ALLOWED = 6
 INVALID_DATE_FORMAT = "1992-08-07T00:00:00Z"
 INVALID_PRODUCT_NAME_FORMAT = "VERIFICAR NOME DO PRODUTO"
 INVALID_PRICE_FORMAT = 999999999
@@ -23,12 +23,11 @@ def validate_type_id(type_id):
          used as a reference for errors in the Database.
     """
     try:
-        type_id = int(type_id)
-        if isinstance(type_id, int):
-            return type_id
-
-        if type_id >= 1 and type_id <= 4:
-            return TYPE_ID_IS_ALLOWED
+        number = int(type_id)
+        print(number)
+        if number >= 1 and number <= 4:
+            return number
+        return TYPE_ID_IS_NOT_ALLOWED
 
     except ValueError:
         return TYPE_ID_IS_NOT_A_NUMBER
