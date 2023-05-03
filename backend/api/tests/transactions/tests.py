@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework.test import APIClient, APITestCase
 from user.models import User
 from transactions.models import Contract
@@ -6,6 +7,32 @@ from tests.constants import (TEST_EMAIL, TEST_PASSW, API_CONTRACTS_URL)
 from rest_framework import status
 from transactions.models import Transaction, TransactionType
 from datetime import datetime
+from django.test import TestCase
+from django.db import IntegrityError
+
+
+class TesteContractModel(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email=TEST_EMAIL,
+            password=TEST_PASSW
+        )
+
+    def tests_the_creation_of_the_Contract_passing_all_the_parameters(self):
+        self.assertTrue(Contract.objects.create(
+            creator=self.user, upload='test.txt', status=1))
+
+    def tests_the_creation_of_the_Contract_whitout_the_parameters(self):
+        with self.assertRaises(IntegrityError):
+            Contract.objects.create(
+                creator=None, upload=None, status=None)
+
+    def test_if_the_contract_creator_is_required(self):
+        with self.assertRaises(IntegrityError):
+            Contract.objects.create(upload='file1.txt', status='1')
+
+    def teste_if_the_upload_file_is_required(self):
+        self.assertTrue(Contract.objects.create(creator=self.user))
 
 
 class ContractCreateListViewTestCase(APITestCase):
@@ -77,7 +104,7 @@ class ContractTransactionsDetailsViewTestCase(APITestCase):
         self.contract = Contract.objects.create(
             creator=self.user_token, upload='file1.txt', status='1')
         type = self.type = TransactionType.objects.create(
-            type=1, description="teste", nature="Entrada", signal="+")
+            type=1, description="teste", nature="Entry", signal="+")
         self.transactions = Transaction.objects.create(
             type=type,
             contract=self.contract,
@@ -95,3 +122,7 @@ class ContractTransactionsDetailsViewTestCase(APITestCase):
         self.assertNotEqual(len(transactions), 0)
         self.assertEqual(transactions[0]['contract'], self.contract.id)
 
+    def test_unauthorized_user_cannot_view_contract_details(self):
+        response = self.client.get(
+            f"{API_CONTRACTS_URL}{self.contract.pk}", follow=True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
