@@ -79,8 +79,7 @@ class User(AbstractUser):
     email = models.CharField(
         max_length=255,
         unique=True,
-        validators=[validate_email],
-        error_messages="You must provide a valid email address"
+        validators=[EmailValidator(message="Enter a valid email address.")]
     )
 
     password = models.CharField(
