@@ -51,6 +51,9 @@ class TestUserModel(TestCase):
         self.assertTrue(user.check_password('testpassword'))
 
 
+API_REGISTER_URL = "/api/users/register/"
+
+
 class RegisterUserViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -58,12 +61,72 @@ class RegisterUserViewTest(TestCase):
     def test_register_user_with_valid_data(self):
 
         data = {
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@example.com",
-            "password": "mypassword"
+            "first_name": "Hubla",
+            "last_name": "transactions",
+            "email": "Hubla.doe@example.com",
+            "password": "hublapassword"
         }
         response = self.client.post(
-            "/api/users/register/", data=data)
+            API_REGISTER_URL, data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(User.objects.count(), 1)
+
+    def test_register_user_with_invalid_data(self):
+
+        data = {
+            "first_name": "Hubla",
+            "last_name": "1nvalid N4me",
+            "email": "invalid-email",
+            "password": "1"
+        }
+        response = self.client.post(API_REGISTER_URL, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_register_user_with_invalid_first_name(self):
+
+        data = {
+            "first_name": "d21d12d1d12d1xxx 2 1@ ffw",
+            "last_name": "transactions",
+            "email": "Hublatransactions@hubla.com",
+            "password": "hublapassword"
+        }
+        response = self.client.post(API_REGISTER_URL, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_register_user_with_invalid_last_name(self):
+
+        data = {
+            "first_name": "Hubla",
+            "last_name": "ASDASD21d 112 d1@ dsa",
+            "email": "Hublatransactions@hubla.com",
+            "password": "hublapassword"
+        }
+        response = self.client.post(API_REGISTER_URL, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_register_user_without_password(self):
+
+        data = {
+            "first_name": "Hubla",
+            "last_name": "transactions",
+            "email": "Hublatransactions@hubla.com",
+            "password": ""
+        }
+        response = self.client.post(API_REGISTER_URL, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_register_user_with_short_numeric_password(self):
+
+        data = {
+            "first_name": "Hubla",
+            "last_name": "transactions",
+            "email": "Hublatransactions@hubla.com",
+            "password": "123"
+        }
+        response = self.client.post(API_REGISTER_URL, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(User.objects.count(), 0)
