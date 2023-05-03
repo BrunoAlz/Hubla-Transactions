@@ -1,8 +1,7 @@
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 from django.test import TestCase
 from user.models import User
-from rest_framework.test import APITestCase
 
 from tests.constants import (TEST_EMAIL, TEST_FIRST_NAME, TEST_LAST_NAME,
                              TEST_PASSW, API_REGISTER_URL, API_LOGIN_URL,
