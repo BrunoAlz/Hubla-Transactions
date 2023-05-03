@@ -57,3 +57,8 @@ class ContractCreateViewTestCase(APITestCase):
         contracts = Contract.objects.filter(creator=self.user_token)
         self.assertEqual(len(response.data), len(contracts))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_contract_list_unauthenticated_user(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(f"{API_CONTRACTS_URL}list/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

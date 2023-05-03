@@ -46,9 +46,8 @@ class JWTAuthentucation:
         except jwt.InvalidTokenError:
             raise exceptions.AuthenticationFailed('Invalid token.')
 
-        user_id = payload['user_id']
-
         try:
+            user_id = payload.get('user_id', None)
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed('User not found.')
@@ -74,3 +73,10 @@ class JWTAuthentucation:
         }
 
         return jwt.encode(payload, f"{config('SECRET_KEY')}", algorithm="HS256")
+
+    def authenticate_header(self, request):
+        """
+        If a request is unauthenticated, determine the WWW-Authenticate
+        header to use for 401 responses, if any.
+        """
+        return 'Bearer'
