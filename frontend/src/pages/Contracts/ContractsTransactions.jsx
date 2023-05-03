@@ -5,6 +5,7 @@ import { contractTransactions } from "../../slices/contracts/contractsSlice";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import notFound404 from "../notFound404";
+import CentsToReal from "../../components/CentsToReal";
 
 const ContractsTransactions = () => {
   const {
@@ -66,7 +67,10 @@ const ContractsTransactions = () => {
                             <td>{transaction.description}</td>
                             <td>{transaction.date}</td>
                             <td>{transaction.product}</td>
-                            <td>{transaction.price}</td>
+
+                            <td>
+                              <CentsToReal cents={transaction.price} />
+                            </td>
                             <td>{transaction.seller}</td>
                             <td>{transaction.signal}</td>
                           </tr>
@@ -93,11 +97,27 @@ const ContractsTransactions = () => {
                           <tr key={index}>
                             <td>{report.person}</td>
                             <td>{report.product}</td>
-                            <td>{report.total_sold_by_producer}</td>
-                            <td>{report.total_sold_by_affiliate}</td>
-                            <td>{report.total_commission_paid}</td>
-                            <td>{report.gross_total}</td>
-                            <td>{report.liquid}</td>
+                            <td>
+                              <CentsToReal
+                                cents={report.total_sold_by_producer}
+                              />
+                            </td>
+                            <td>
+                              <CentsToReal
+                                cents={report.total_sold_by_affiliate}
+                              />
+                            </td>
+                            <td>
+                              <CentsToReal
+                                cents={report.total_commission_paid}
+                              />
+                            </td>
+                            <td>
+                              <CentsToReal cents={report.gross_total} />
+                            </td>
+                            <td>
+                              <CentsToReal cents={report.liquid} />
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -119,7 +139,11 @@ const ContractsTransactions = () => {
                                 <tr key={affiliate_name}>
                                   <td>{affiliate_name}</td>
                                   <td>{report.product}</td>
-                                  <td>{report.affiliates[affiliate_name]}</td>
+                                  <td>
+                                    <CentsToReal
+                                      cents={report.affiliates[affiliate_name]}
+                                    />{" "}
+                                  </td>
                                 </tr>
                               );
                             }
