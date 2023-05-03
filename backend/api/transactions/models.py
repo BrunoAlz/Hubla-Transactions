@@ -3,6 +3,7 @@ from user.models import User
 from core.utils.file_path import upload_documentos
 from django.core.validators import FileExtensionValidator
 from datetime import datetime
+from django.core.exceptions import ValidationError
 
 
 class Contract(models.Model):
@@ -116,13 +117,11 @@ class Transaction(models.Model):
     )
 
     price = models.PositiveIntegerField(
-        null=True, blank=True
     )
 
     seller = models.CharField(
         'seller',
         max_length=20,
-        null=True, blank=True
     )
 
     class Meta:
@@ -137,6 +136,11 @@ class Transaction(models.Model):
         data_iso = datetime.fromisoformat(self.date)
         data_formatada = data_iso.strftime("%Y-%m-%dT%H:%M:%SGMT%z")
         return data_formatada
+
+    def validate_price(value):
+        if value < 0:
+            raise ValidationError(
+                'Price must be greater than or equal to zero.')
 
 
 class Report(models.Model):

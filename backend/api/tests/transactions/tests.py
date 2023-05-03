@@ -1,16 +1,17 @@
 from django.forms import ValidationError
 from rest_framework.test import APIClient, APITestCase
+# from transactions.models import Report
 from user.models import User
 from transactions.models import Contract
 from user.authentication import JWTAuthentucation
 from tests.constants import (
     TEST_EMAIL, TEST_PASSW, API_CONTRACTS_URL, UPLOADS,
-    PENDING, PROCESSED, PROCESSING, VENDA_PRODUTOR)
+    PENDING, VENDA_PRODUTOR)
 from rest_framework import status
 from transactions.models import Transaction, TransactionType
-from datetime import datetime, timezone
+from datetime import datetime
 from django.test import TestCase
-from django.db import IntegrityError
+from django.db import DataError, IntegrityError
 
 
 class TesteContractModel(TestCase):
@@ -83,6 +84,48 @@ class TestTransactionModelTestCase(TestCase):
             seller='Test Seller'
         )
         self.assertIsNotNone(transaction.pk)
+
+    def test_transaction_seller_is_required(self):
+        transaction_type = TransactionType.objects.create(
+            type=VENDA_PRODUTOR, description='test type', nature='Entrada', signal='+'
+        )
+        contract = Contract.objects.create(
+            creator=self.user, upload=UPLOADS, status=PENDING
+        )
+        with self.assertRaises(IntegrityError):
+            Transaction.objects.create(
+                type=transaction_type, contract=contract,
+                date=datetime.now(), product='Test Product', price=1000,
+                seller=None
+            )
+
+    def test_transaction_price_is_required(self):
+        transaction_type = TransactionType.objects.create(
+            type=VENDA_PRODUTOR, description='test type', nature='Entrada', signal='+'
+        )
+        contract = Contract.objects.create(
+            creator=self.user, upload=UPLOADS, status=PENDING
+        )
+        with self.assertRaises(IntegrityError):
+            Transaction.objects.create(
+                type=transaction_type, contract=contract,
+                date=datetime.now(), product='Test Product', price=None,
+                seller="Teste Seller"
+            )
+
+    def test_transaction_if_price_can_be_negative(self):
+        transaction_type = TransactionType.objects.create(
+            type=VENDA_PRODUTOR, description='test type', nature='Entrada', signal='+'
+        )
+        contract = Contract.objects.create(
+            creator=self.user, upload=UPLOADS, status=PENDING
+        )
+        with self.assertRaises(DataError):
+            Transaction.objects.create(
+                type=transaction_type, contract=contract,
+                date=datetime.now(), product='Test Product', price=-2131,
+                seller="Teste Seller"
+            )
 
 
 class ContractCreateListViewTestCase(APITestCase):
