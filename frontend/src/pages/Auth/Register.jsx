@@ -34,11 +34,7 @@ const Register = () => {
     }
     if (isSuccess) {
       navigate("/login");
-<<<<<<< HEAD
-      toast.success("Registered, Now just Login!!");
-=======
       toast.success("Registered successfully");
->>>>>>> bb17476665970142b806cd325cce9956ae01ea9e
     }
 
     dispatch(reset());
