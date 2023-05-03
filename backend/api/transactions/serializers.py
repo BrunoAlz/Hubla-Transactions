@@ -1,26 +1,22 @@
 from rest_framework import serializers
 from .models import Contract, Transaction, TransactionType, Report
-import os
 
 
 class ContractRegisterSerializer(serializers.ModelSerializer):
+    """
+    A serializer for creating a new Contract object.
+
+    """
     class Meta:
         model = Contract
         fields = ['upload']
 
-    def validate(self, data):
-        if not data.get('upload'):
-            raise serializers.ValidationError(
-                {'error': 'Você deve enviar um documento'})
-
-        file_extension = os.path.splitext(data['upload'].name)[1]
-        if file_extension.lower() != '.txt':
-            raise serializers.ValidationError(
-                {'error': 'Apenas arquivos .txt são aceitos.'})
-
-        return data
-
     def create(self, validated_data):
+        """
+        Returns:
+            A new Contract object created with the validated data 
+            and the authenticated user as the creator.
+        """
         user = self.context.get('user')
         instance = Contract(upload=validated_data['upload'], creator=user)
         instance.save()
@@ -28,6 +24,10 @@ class ContractRegisterSerializer(serializers.ModelSerializer):
 
 
 class ContractListSerializer(serializers.ModelSerializer):
+    """
+     A serializer for retrieving a list of Contract 
+     objects created by the authenticated user.
+    """
     first_name = serializers.CharField(
         source='creator.first_name', read_only=True)
     last_name = serializers.CharField(
@@ -40,12 +40,23 @@ class ContractListSerializer(serializers.ModelSerializer):
 
 
 class TransactionsTypeSerializer(serializers.ModelSerializer):
+    """
+        A serializer for retrieving TransactionType objects.
+    """
     class Meta:
         model = TransactionType
         fields = '__all__'
 
 
 class ContractTransactionsSerializer(serializers.ModelSerializer):
+    """
+    A serializer for retrieving a list of Transaction objects
+    associated with a Contract.
+
+    `description, nature and signal:` are being accessed through the
+    relationship in the database so that more information is displayed
+    to the user.
+    """
     description = serializers.CharField(
         source='type.description', read_only=True)
 
@@ -63,12 +74,31 @@ class ContractTransactionsSerializer(serializers.ModelSerializer):
 
 
 class ReportSerializer(serializers.ModelSerializer):
+    """
+        A serializer for retrieving Report objects.
+    """
     class Meta:
         model = Report
         fields = '__all__'
 
 
 class ContractDetailSerializer(serializers.ModelSerializer):
+    """
+    A serializer for retrieving a detailed representation of a Contract
+    including associated transactions and a report.
+
+    Attributes:
+        `transactio_contract` (ContractTransactionsSerializer): A nested
+        serializer for retrieving a list of Transactions
+        associated with the Contract.
+
+        `report (method)`: A method for retrieving the first Report object
+        associated with the Contract.
+
+        `Returns:`
+            dict or None: The serialized representation of the first Report
+            object, or None if no Report is associated with the Contract.
+    """
     transactio_contract = ContractTransactionsSerializer(many=True)
     report = serializers.SerializerMethodField()
 
@@ -77,6 +107,7 @@ class ContractDetailSerializer(serializers.ModelSerializer):
         fields = ['transactio_contract', 'report']
 
     def get_report(self, obj):
+
         report = obj.report.first()
         if report:
             return ReportSerializer(report).data
