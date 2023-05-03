@@ -3,10 +3,12 @@ from rest_framework.test import APIClient, APITestCase
 from user.models import User
 from transactions.models import Contract
 from user.authentication import JWTAuthentucation
-from tests.constants import (TEST_EMAIL, TEST_PASSW, API_CONTRACTS_URL)
+from tests.constants import (
+    TEST_EMAIL, TEST_PASSW, API_CONTRACTS_URL, UPLOADS,
+    PENDING, PROCESSED, PROCESSING, VENDA_PRODUTOR)
 from rest_framework import status
 from transactions.models import Transaction, TransactionType
-from datetime import datetime
+from datetime import datetime, timezone
 from django.test import TestCase
 from django.db import IntegrityError
 
@@ -20,7 +22,7 @@ class TesteContractModel(TestCase):
 
     def tests_the_creation_of_the_Contract_passing_all_the_parameters(self):
         self.assertTrue(Contract.objects.create(
-            creator=self.user, upload='test.txt', status=1))
+            creator=self.user, upload='test.txt', status=PENDING))
 
     def tests_the_creation_of_the_Contract_whitout_the_parameters(self):
         with self.assertRaises(IntegrityError):
@@ -29,10 +31,58 @@ class TesteContractModel(TestCase):
 
     def test_if_the_contract_creator_is_required(self):
         with self.assertRaises(IntegrityError):
-            Contract.objects.create(upload='file1.txt', status='1')
+            Contract.objects.create(upload='file1.txt', status=PENDING)
 
     def teste_if_the_upload_file_is_required(self):
         self.assertTrue(Contract.objects.create(creator=self.user))
+
+
+class TestTransactionTypeModel(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email=TEST_EMAIL,
+            password=TEST_PASSW)
+
+    def test_transaction_type_creation(self):
+        type = TransactionType.objects.create(
+            type=VENDA_PRODUTOR,
+            description="teste type",
+            nature="Entry",
+            signal="+"
+        )
+        self.assertIsInstance(type, TransactionType)
+        self.assertEqual(str(type), "1 - teste type - Entry - +")
+
+    def test_transaction_type_signal_accepts_only_valid_choices(self):
+        with self.assertRaises(ValidationError):
+            type = TransactionType.objects.create(
+                type=VENDA_PRODUTOR,
+                description="Test type",
+                nature="Entry",
+                signal="2"
+            )
+            type.full_clean()
+
+
+class TestTransactionModelTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email=TEST_EMAIL,
+            password=TEST_PASSW)
+
+    def test_transaction_created_successfully(self):
+        transaction_type = TransactionType.objects.create(
+            type=VENDA_PRODUTOR, description='test type', nature='Entrada', signal='+'
+        )
+        contract = Contract.objects.create(
+            creator=self.user, upload=UPLOADS, status=PENDING
+        )
+        transaction = Transaction.objects.create(
+            type=transaction_type, contract=contract,
+            date=datetime.now(), product='Test Product', price=1000,
+            seller='Test Seller'
+        )
+        self.assertIsNotNone(transaction.pk)
 
 
 class ContractCreateListViewTestCase(APITestCase):
