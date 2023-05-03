@@ -17,13 +17,13 @@ class Command(BaseCommand):
             pending = Contract.objects.filter(status=1)
             for data in pending:
                 self.stdout.write(self.style.WARNING(
-                    f"Processing the Contract: {data.id}"))
+                    f"Processing the contract: {data.id}"))
 
                 call_command('call_data_processor', data.upload.path,
                              int(data.id), force_color=False)
 
                 self.stdout.write(self.style.SUCCESS(
-                    f"The Contract: {data.id} has been Processed!"))
+                    f"The Contract: {data.id} has been processed"))
 
         else:
 

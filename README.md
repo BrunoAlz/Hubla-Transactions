@@ -4,27 +4,26 @@
 - [Python] - https://www.python.org
 - [Django] - https://www.djangoproject.com
 - [Bootstrap] - https://getbootstrap.com
-- [React JS] - https://react.dev
+- [ReactJS] - https://react.dev
+- [MySql] - https://www.mysql.com/
 
-## Instalação
+## Instalação Backend
 Para instalar o projeto e preparar seu ambiente, execute os comandos abaixo:
-```
 
-...
-```
-## Configurações
-
+1. Dentro da pasta /backend use o comando `python -m venv venv` para criar o ambiente virtual.
+2. Depois utilize o comando `pip install -r requirements.txt` para instalar as depedências no ambiente.
+3. Utilize o comando `python env_gen.py` para gerar o .env.
 
 ## Banco de dados
-O banco de dados e suas tabelas precisam ser criadas, sendo necessário a execução dos comandos:
+O banco de dados precisa ser criado ser manualmente:
 
-1. Criar a base de dados manualmente usando a Collation `utf8mb3_general_ci`.
-2. 
+1. Criar o banco compatível com as configurações do .env
+2. Após a criação do banco Utilize o comando `python manage.py migrate` para gerar as migrações.
+5. Suba o servidor usando o comando `python manage.py runserver`.
 
-```
-    
-...
-```
+## Instalação Frontend
+1. No diretório /frontend use o comando `npm install` para instalar as dependências.
+2. Após a instalação utilize o comando `npm run dev` para subir o servidor de do cliente.
 
 ## Responsabilidades
 Em sua raíz, o projeto contém uma separação básica entre frontend e backend.
@@ -53,25 +52,30 @@ Foi tomada em conta essa abordagem, sendo os arquivos responsáveis:
 - https://github.com/BrunoAlz/Hubla-Transactions/blob/master/backend/api/core/management/commands/call_data_processor.py
 - https://github.com/BrunoAlz/Hubla-Transactions/blob/master/backend/api/core/management/commands/get_bd_data.py
 
-A fim de separar as responsabilidades, foram criados dois comandos, sendo: `call_data_processor` e `get_bd_data`.
+
+A fim de separar as responsabilidades, foram criados dois comandos, sendo: `call_data_processor` e `get_bd_data`. 
+
+Para utilizar os comandos é necessário estar no mesmo nível hierarquico do arquivo `manage.py`. 
+
+Para processar os dados basta utilizar o comando `python manage.py get_bd_data`.
+
 - `get_bd_data`: responsável por buscar todos os contratos pendentes no banco de dados e enviar para o outro comando executar. Caso não existam contratos pendentes, será exibida a seguinte mensagem:
     ```
     There are no transactions to be processed
     ```
 - `call_data_processor`: responsável por ler cada linha do contrato, interpretar aquela transação e então consolidar os dados para gerar um relatório no final.
     ```
-    Processamento Finalizado!
+    Finished processing
     # or 
-    Erro no processamento!
+    Processing error
     ```
 
 > Ambos comandos, segundo a própria documentação do framework , podem ser executados por exemplo a partir do terminal, ou seja, podem existir diferentes tipos de gatilhos para que isso ocorra (ex: cron ou alguma tarefa agendada).
 
 ### Testes unitários
-Para realizar os testes unitários, é necessário entrar na pasta backend
-e rodar o comando `pytest`, para resultados simples e `pytest --cov` para o coverage
+Para realizar os testes unitários, é necessário entrar na pasta backend, no mesmo nível hierarquico do arquivo `manage.py`. 
+e rodar o comando `pytest` para resultados simples e `pytest --cov` para o coverage.
 ```
-
 
 api\tests\constants.py               16      0   100%
 api\tests\transactions\tests.py     100      3    97%   157-159
@@ -109,9 +113,9 @@ python manage.py get_bd_data
 }]
 ```
 
-### Exemplo de um contrato
+### Exemplo de uma transação
 ```
-2 linhas de transação aqui ...
+12022-01-15T19:20:30-03:00CURSO DE BEM-ESTAR            0000012750JOSE CARLOS
 ```
 
 ### Como os dados são extraídos

@@ -79,8 +79,8 @@ class Command(BaseCommand):
         return cached_types[extracted_id]
 
     def add_arguments(self, parser):
-        parser.add_argument('file', type=str, help='Caminho do Arquivo')
-        parser.add_argument('id', type=int, help='Id do Contrato')
+        parser.add_argument('file', type=str, help='File path')
+        parser.add_argument('id', type=int, help='Contract ID')
 
     @transaction_atomic.atomic
     def handle(self, *args, **kwargs):
@@ -94,7 +94,7 @@ class Command(BaseCommand):
 
         with open(file, 'r') as file:
             self.stdout.write(self.style.WARNING(
-                "Processamento Iniciado..."))
+                "Processing Started..."))
 
             for line in file:
                 type_id = validate_type_id(line[0])
@@ -182,6 +182,6 @@ class Command(BaseCommand):
             Contract.objects.filter(id=contract_id).update(
                 status=3)
 
-            self.stdout.write(self.style.SUCCESS("Processamento Finalizado!"))
+            self.stdout.write(self.style.SUCCESS("Finished processing"))
         except DatabaseError:
-            self.stdout.write(self.style.ERROR("Erro no processamento"))
+            self.stdout.write(self.style.ERROR("Processing error"))

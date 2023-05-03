@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "673c7422-b456-4e59-9359-4cbcc2ddd38f",
+		"name": "Transactions API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18570239"
+	},
+	"item": [
+		{
+			"name": "USER - REGISTER - LOGIN - JWT",
+			"item": [
+				{
+					"name": "CADASTRAR USUÁRIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"user_first_name\",\r\n    \"last_name\": \"user_last_name\",\r\n    \"email\": \"user_email@gmailcom\",\r\n    \"password\": \"user_senha@\",\r\n    \"password_confirm\": \"user_senha@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{django}}api/users/register/",
+							"host": [
+								"{{django}}api"
+							],
+							"path": [
+								"users",
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GERAR TOKEN JWT E LOGAR USUÁRIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user_email@gmail.com\",\r\n    \"password\": \"user_senha@\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{django}}api/users/login/",
+							"host": [
+								"{{django}}api"
+							],
+							"path": [
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TRANSACTIONS - CONTRACT - UPLOAD- LIST",
+			"item": [
+				{
+					"name": "CADASTRAR UM CONTRATO",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upload",
+									"type": "file",
+									"src": "/C:/Users/bruno/OneDrive/Documentos/CANDIDATURAS/sales.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{django}}api/transactions/contract/",
+							"host": [
+								"{{django}}api"
+							],
+							"path": [
+								"transactions",
+								"contract",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR CONTRATOS DO USUÁRIO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2ODI5MTc0MDQsImlhdCI6MTY4MjgzMTAwNH0.jmxb41Ja7Mg7R_BlZ3fN1Cq4EPoA61fLFT1hG_PVyCU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upload",
+									"type": "file",
+									"src": "/C:/Users/bruno/OneDrive/Documentos/GitHub/desafio-programacao-fullstack-1.2.0/sales.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{django}}api/transactions/contract/list/",
+							"host": [
+								"{{django}}api"
+							],
+							"path": [
+								"transactions",
+								"contract",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LISTAR TRANSAÇÕES DO CONTRATO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE2ODI2MTk1NjAsImlhdCI6MTY4MjUzMzE2MH0.PNOCQR7CfwtPhGTBECdtf2mZ0mrbpXdAAm-5YZ8Bh5A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upload",
+									"type": "file",
+									"src": "/C:/Users/bruno/OneDrive/Documentos/GitHub/desafio-programacao-fullstack-1.2.0/sales.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{django}}api/transactions/contract/1",
+							"host": [
+								"{{django}}api"
+							],
+							"path": [
+								"transactions",
+								"contract",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
