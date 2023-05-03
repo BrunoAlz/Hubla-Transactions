@@ -41,7 +41,8 @@ class RegisterUserView(APIView):
             return Response(
                 {"success": "User registred!"}, status=status.HTTP_200_OK
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginUserAPIView(APIView):
@@ -61,8 +62,8 @@ class LoginUserAPIView(APIView):
     """
 
     def post(self, request):
-        email = request.data['email']
-        password = request.data['password']
+        email = request.data.get('email', None)
+        password = request.data.get('password', None)
         user = User.objects.filter(email=email).first()
 
         if user is None:
